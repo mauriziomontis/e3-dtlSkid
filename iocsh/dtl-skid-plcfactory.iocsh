@@ -1,0 +1,22 @@
+# DTL SKID Application - plcfactory generated application
+# developed by Maurizio Montis | INFN-LNL
+# 
+
+#
+# Parameters
+# 
+epicsEnvSet("PLC_ADDRESS", "10.6.0.56")
+epicsEnvSet("RECV_TIMEOUT", "3000")
+
+
+#
+# Require modules
+#
+
+require cwm-cws04_ctrl-plc-001,plcfactory
+
+#
+# Commands and instructions
+#
+
+loadIocsh(cwm-cws04_ctrl-plc-001.iocsh, "IPADDR=${PLC_ADDRESS}, RECVTIMEOUT=${RECV_TIMEOUT}")

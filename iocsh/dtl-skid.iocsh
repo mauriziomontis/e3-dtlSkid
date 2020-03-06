@@ -1,4 +1,32 @@
+# DTL SKID Application - complete control 
+# developed by Maurizio Montis | INFN-LNL
+#
+# the application uses dtl-skid-plcfactory.iocsh script
+# based ob the plcfactory EPICS module and extend the functionality
+# In particular:
+# 	- define the set of PVs required for the syncronization 
+# 	- implements a state machine for the EPICS<->PLC communication 
+#
+# This startup file call the base application and the extended functionalities
 
+#
+# Parameters and Configurations
+#
+epicsEnvSet("PLC_ADDRESS", "10.6.0.56")
+epicsEnvSet("RECVTIMEOUT", "3000")
+
+
+#
+# Required Modules
+#
+require cwm-cws04_ctrl-plc-001,plcfactory
+
+
+#
+# PLC Communication Setup 
+#
+
+###################################################################################
 # @field IPADDR
 # @type STRING
 # PLC IP address
@@ -9,16 +37,16 @@
 
 # @field cwm-cws04_ctrl-plc-001_VERSION
 # @runtime YES
-
+###################################################################################
 
 # S7 port           : 2000
 # Input block size  : 7774 bytes
 # Output block size : 0 bytes
 # Endianness        : BigEndian
-s7plcConfigure("CWM-CWS04:Ctrl-PLC-001", $(IPADDR), 2000, 7774, 0, 1, $(RECVTIMEOUT), 0)
+s7plcConfigure("CWM-CWS04:Ctrl-PLC-001", $(PLC_ADDRESS), 2000, 7774, 0, 1, $(RECVTIMEOUT), 0)
 
 # Modbus port       : 502
-drvAsynIPPortConfigure("CWM-CWS04:Ctrl-PLC-001", $(IPADDR):502, 0, 0, 1)
+drvAsynIPPortConfigure("CWM-CWS04:Ctrl-PLC-001", $(PLC_ADDRESS):502, 0, 0, 1)
 
 # Link type         : TCP/IP (0)
 modbusInterposeConfig("CWM-CWS04:Ctrl-PLC-001", 0, $(RECVTIMEOUT), 0)
@@ -29,12 +57,16 @@ modbusInterposeConfig("CWM-CWS04:Ctrl-PLC-001", 0, $(RECVTIMEOUT), 0)
 # Data segment      : 2 words
 drvModbusAsynConfigure("CWM-CWS04:Ctrl-PLC-001write", "CWM-CWS04:Ctrl-PLC-001", 0, 16, -1, 2, 0, 0, "S7-1500")
 
-# Load plc interface database
-dbLoadRecords("cwm-cws04_ctrl-plc-001.db", "PLCNAME=CWM-CWS04:Ctrl-PLC-001, MODVERSION=$(cwm-cws04_ctrl-plc-001_VERSION), S7_PORT=2000, MODBUS_PORT=502")
 
-# Added by Maurizio Montis | INFN-LNL
+# 
+# Databases and Template 
+#
+dbLoadRecords("cwm-cws04_ctrl-plc-001.db", "PLCNAME=CWM-CWS04:Ctrl-PLC-001, MODVERSION=$(cwm-cws04_ctrl-plc-001_VERSION), S7_PORT=2000, MODBUS_PORT=502")
 dbLoadRecords("cwm-cws04_ctrl-plc-001-sync.db")
 dbLoadTemplate("cwm-cws04_ctrl-plc-001-sync.substitutions")
 
 
-
+#
+# SQL State Machine
+# 
+afterInit(seq DtlSkid_communication)
