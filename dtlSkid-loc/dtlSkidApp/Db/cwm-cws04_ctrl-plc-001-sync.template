@@ -1,0 +1,25 @@
+# DTL plcFactory data synchronization
+# template required to synchronize data between EPICS and PLC during local/remote communication
+#
+# Developed by Maurizio Montis | INFN-LNL
+# mail: maurizio.montis@lnl.infn.it
+#
+# Changelog:
+# V1.0:
+#      - initial setup
+#  
+
+record(seq, "$(EPICS_PV)-Sync")
+{
+	field(DESC, "PV synchronization") 
+	field(SCAN, "$(SCAN)")
+	field(SDIS, "$(SDIS)")
+	field(DISV, "$(DISV)")
+	field(SELM, "All")
+	field(DOL1, "$(EPICS_PV)-RB")
+	field(LNK1, "$(EPICS_PV)")
+	field(DO2, "1")
+	field(LNK2, "$(EPICS_PV).PROC")
+	field(DLY2, "0.5")
+
+}

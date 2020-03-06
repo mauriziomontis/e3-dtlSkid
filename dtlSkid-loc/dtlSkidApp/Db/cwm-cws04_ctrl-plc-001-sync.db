@@ -1,0 +1,31 @@
+# DTL plcFactory data synchronization
+# Lock system to prevent unauthrized sync loops
+#
+# The CODE used by DTL Skid application is:
+# - PLC side:
+# 	* State 0,1: 0xFFFF FFFF FFFF FF00 (-256)
+# 	* State 2,3: 0xFFFF FFFF FFFF FF11 (-239)
+# 	* State 4:   0xFFFF FFFF FFFF FF22 (-222)
+# 	* State 5:   0xFFFF FFFF FFFF FF33 (-205)
+# 	* State 6:   0xFFFF FFFF FFFF FF44 (-188)
+# - EPICS side:
+# 	* Condition 1 (_ACK):  0xFFFF FFFF FFFF DD22
+# 	* Condition 2 (_DONE): 0xFFFF FFFF FFFF DD33
+#
+# Developed by Maurizio Montis | INFN-LNL
+# mail: maurizio.montis@lnl.infn.it
+#
+# Changelog:
+# V1.0:
+#      - initial setup
+#  
+
+record(calcout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck")
+{
+	field(DESC, "PV sync lock system") 
+	field(SCAN, ".1 second")
+	field(INPA, "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg")
+	field(INPB, "CWM-CWS04:Ctrl-Intf-001:EPICSCommMsg")
+	field(CALC, "(A=-188)?1:0")
+
+}
