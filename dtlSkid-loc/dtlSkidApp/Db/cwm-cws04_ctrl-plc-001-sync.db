@@ -30,7 +30,7 @@ record(calcout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck")
 
 }
 
-record(stringout, "CWM-CWS04:Ctrl-Intf-001:StateMachine")
+record(stringout, "CWM-CWS04:Ctrl-Intf-001:SMStat")
 {
 	field(DESC, "State Machine Status")
 	field(SCAN, "Passive")

@@ -25,7 +25,9 @@ program DtlSkid_communication
 /*
 # Libraries
 */
+
 %%#include <stdio.h>
+%%#include <string.h>
 
 /*
 # Variables and Constants
@@ -38,17 +40,13 @@ int EPICS_CODE;
 assign EPICS_CODE to "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg";
 monitor EPICS_CODE;
 
-string State_Machine;
-assign State_Machine to "CWM-CWS04:Ctrl-Intf-001:StateMachine";
-
+//string smStatus;
+//assign smStatus to "CWM-CWS04:Ctrl-Intf-001:SMStat";
 
 /*
 # Debug Mode: 
 */
-
 double DEBUG=1;
-
-
 
 /*
 # State Machine Definition
@@ -60,9 +58,9 @@ ss communication_management {
 	state initialization {
 		/* Verify PV availability */
 		when (pvConnectCount()==pvAssignCount()) { 
-			printf("State Machine Initialization Complete\n\t PVs connected:\n\t - EPICS Communication: %s\n\t - PLC Communication: %s\n\n", EPICS_CODE, PLC_CODE);
-			State_Machine="State Machine Initialization";
-			pvPut(State_Machine);
+			printf("State Machine Initialization Complete\n\t PVs connected:\n\t - EPICS Communication: %x\n\t - PLC Communication: %x\n\n", EPICS_CODE, PLC_CODE);
+			//smStatus="State Machine Initialization";
+			//pvPut(smStatus);
 		} state iocCommSetup
 	}
 
@@ -73,8 +71,8 @@ ss communication_management {
 			EPICS_CODE=-8926;
 			pvPut(EPICS_CODE);
 			printf("Start Data Synchronization: PLC --> EPICS\n\t Actual values: EPICS_CODE: %x\t PLC_CODE: %x\n\n", EPICS_CODE, PLC_CODE);
-			State_Machine="Synchronization Mode";
-			pvPut(State_Machine);
+			//smStatus="Synchronization Mode";
+			//pvPut(smStatus);
 		} state dataSync
 	}
 
@@ -85,16 +83,16 @@ ss communication_management {
 			EPICS_CODE=-8960;
 			pvPut(EPICS_CODE);
                         printf("Reset Synchronization due to Connection Lost\n\t Actual values: EPICS_CODE: %x\t PLC_CODE: %x\n\n", EPICS_CODE, PLC_CODE);
-			State_Machine="Reset Synchronization";
-			pvPut(State_Machine);
+			//smStatus="Reset Synchronization";
+			//pvPut(smStatus);
                 } state iocCommSetup
 		
 		when(PLC_CODE == -205 && (delay(2))) {
 			EPICS_CODE=-8909;
                         pvPut(EPICS_CODE);
                         printf("Remote Control Enabled: EPICS <--> PLC Communicatio Estamblished\n\t Actual values: EPICS_CODE: %x\t PLC_CODE: %x\n\n", EPICS_CODE, PLC_CODE);
-                        State_Machine="Remote Control Enabled";
-                        pvPut(State_Machine);
+                        //smStatus="Remote Control Enabled";
+                        //pvPut(smStatus);
 		} state remoteControl
 	}
 
@@ -105,8 +103,8 @@ ss communication_management {
 			EPICS_CODE=-8960;
                         pvPut(EPICS_CODE);
                         printf("Reset Synchronization due to Connection Lost\n\t Actual values: EPICS_CODE: %x\t PLC_CODE: %x\n\n", EPICS_CODE, PLC_CODE);
-                        State_Machine="Reset Synchronization";
-                        pvPut(State_Machine);		
+                        //smStatus="Reset Synchronization";
+                        //pvPut(smStatus);		
 		} state iocCommSetup
 	}
 
