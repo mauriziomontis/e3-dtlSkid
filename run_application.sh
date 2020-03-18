@@ -1,1 +1,0 @@
-iocsh.bash
