@@ -1,0 +1,24 @@
+# DTL SKID Application - complete control 
+# developed by Maurizio Montis | INFN-LNL
+#
+# the application uses dtl-skid-plcfactory.iocsh script
+# based ob the plcfactory EPICS module and extend the functionality
+# In particular:
+# 	- define the set of PVs required for the syncronization 
+# 	- implements a state machine for the EPICS<->PLC communication 
+#
+# This startup file call the base application and the extended functionalities
+
+#
+# Parameters and Configurations
+#
+
+
+
+# 
+# Databases and Template 
+#
+dbLoadRecords("cwm-cws04_ctrl-plc-001-sync.db")
+dbLoadTemplate("cwm-cws04_ctrl-plc-001-sync.substitutions")
+
+
