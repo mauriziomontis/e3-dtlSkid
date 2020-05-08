@@ -20,6 +20,7 @@ record(seq, "$(EPICS_PV)-Sync")
 	field(LNK1, "$(EPICS_PV)")
 	field(DO2, "1")
 	field(LNK2, "$(EPICS_PV).PROC")
-	field(DLY2, "0.5")
+	field(DLY2, "1")
+	field(FLNK, "$(FLNK)")
 
 }

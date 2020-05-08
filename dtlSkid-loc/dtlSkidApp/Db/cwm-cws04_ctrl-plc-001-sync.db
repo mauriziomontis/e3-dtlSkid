@@ -25,13 +25,33 @@ record(calcout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck")
 	field(DESC, "PV sync lock system") 
 	field(SCAN, ".1 second")
 	field(INPA, "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg")
-	field(INPB, "CWM-CWS04:Ctrl-Intf-001:EPICSCommMsg")
+	#field(INPB, "CWM-CWS04:Ctrl-Intf-001:EPICSCommMsg")
 	field(CALC, "(A=-188)?1:0")
 
 }
 
-record(stringout, "CWM-CWS04:Ctrl-Intf-001:SMStat")
-{
-	field(DESC, "State Machine Status")
-	field(SCAN, "Passive")
+
+record(ao, "CWM-CWS04:Ctrl-Intf-001:EPICSExecSync") {
+	field(DESC, "Execute Syncronization")
+	field(OMSL, "supervisory")
+	field(PINI, "YES")
+	field(VAL, "0")
+	#field(OUT, "CWM-CWS04:WtrC-YSV-001:MovTim-Sync.PROC CP")
+	#field(OUT, "CWM-CWS04:WtrC-CIT-001:Ilck-NotEnb-Sync.PROC CP")
+	field(FLNK, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncFout")
+}
+
+record(dfanout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncFout") {
+	field(DESC, "Dfanout Syncronization")
+	field(OMSL, "closed_loop")
+	field(DOL, "CWM-CWS04:Ctrl-Intf-001:EPICSExecSync")
+	## to check for any software update
+	field(OUTA, "CWM-CWS04:WtrC-EH-001:FBL-RevOp-Sync.PROC")
+	field(OUTB, "CWM-CWS04:WtrC-TCV-001:NOTyp-Sync.PROC")
+	field(OUTC, "CWM-CWS04:WtrC-YSV-001:Enb-Sync.PROC")
+	field(OUTD, "CWM-CWS04:WtrC-TCV-001:Pos-Def-Sync.PROC")
+	field(OUTE, "CWM-CWS04:WtrC-Y-001:Freq-Def-Sync.PROC")
+	field(OUTF, "")
+	field(OUTG, "")
+	field(OUTH, "")
 }
