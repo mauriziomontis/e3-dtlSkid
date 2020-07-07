@@ -357,8 +357,23 @@ file cwm-cws04_ctrl-plc-001-sync.template
 		{"CWM-CWS04:WtrC-YSV-011:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-012:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-013:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:MovTim-Sync.PROC"}
-		{"CWM-CWS04:WtrC-YSV-014:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1",""}
-
-			
-
+		{"CWM-CWS04:WtrC-YSV-014:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:MTC-NotEnb.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1",""}
 }
