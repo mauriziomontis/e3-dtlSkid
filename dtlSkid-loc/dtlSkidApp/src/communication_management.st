@@ -57,7 +57,7 @@ monitor EPICS_LOCK_SYNC;
 
 /* Configurations" */ 
 int actual_force_val = 0;
-int wait_sync = 120;  		//wait syncronization in seconds
+int wait_sync = 130;  		//wait syncronization in seconds
 int remote_check_time = 300; //remote state heartbeat in seconds
 
 
@@ -158,13 +158,18 @@ ss communication_management {
 /* state remoteControl*/ 
 	state remoteControl {
 		
-		when( (PLC_CODE == -256) || (PLC_CODE == -239) ) {
+		when( (PLC_CODE == -256) || (PLC_CODE == -239) || (PLC_CODE == -222) ) {
 			/* Communication issue */
 			/* Security check: set EPICS_CODE to an arbitrary value */
 			EPICS_CODE=7337;
 			pvPut(EPICS_CODE); 
 			if (DEBUG == 1) { printf("[SEQ Message] Set EPICS Communication Code 0x00001CA9 [7337] while in remote control stage\n"); }
 		} state setSync
+		
+		when( PLC_CODE == -205 ) {
+			/* Communication still waining PLC code [-108] */
+			if (DEBUG == 1) { printf("[SEQ Message] PLC Code pending on 0xFFFFFF33 [-205].  Waiting for 0xFFFFFF44 [-108]\n"); }
+		} state confirmSync
 		
 		when(delay(remote_check_time)) {
 			/* Check remote status*/

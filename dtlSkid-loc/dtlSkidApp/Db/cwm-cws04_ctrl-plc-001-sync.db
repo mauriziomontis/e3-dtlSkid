@@ -51,7 +51,7 @@ record(dfanout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncFout") {
 	field(OUTC, "CWM-CWS04:WtrC-YSV-001:Enb-Sync.PROC")
 	field(OUTD, "CWM-CWS04:WtrC-TCV-001:Pos-Def-Sync.PROC")
 	field(OUTE, "CWM-CWS04:WtrC-Y-001:Freq-Def-Sync.PROC")
-	field(OUTF, "")
+	field(OUTF, "CWM-CWS04:WtrC-YSV-001:MovTim-Sync.PROC")
 	field(OUTG, "")
 	field(OUTH, "")
 }

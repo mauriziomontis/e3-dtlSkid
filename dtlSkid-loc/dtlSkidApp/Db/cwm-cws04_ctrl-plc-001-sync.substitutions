@@ -351,29 +351,35 @@ file cwm-cws04_ctrl-plc-001-sync.template
 		{"CWM-CWS04:WtrC-Y-501:FBL-TimLag","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-Y-501:FBL-ManFreq-Sync.PROC"}
 		{"CWM-CWS04:WtrC-Y-501:FBL-ManFreq","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-Y-501:FBL-OutHiLim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-Y-501:FBL-OutHiLim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-Y-501:FBL-OutLoLim-Sync.PROC"}
-		{"CWM-CWS04:WtrC-Y-501:FBL-OutLoLim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:MovTim-Sync.PROC"}
+		{"CWM-CWS04:WtrC-Y-501:FBL-OutLoLim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1",""}		
 		{"CWM-CWS04:WtrC-YSV-001:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-002:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-011:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-012:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:MovTim-Sync.PROC"}
 		{"CWM-CWS04:WtrC-YSV-013:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:MovTim-Sync.PROC"}
-		{"CWM-CWS04:WtrC-YSV-014:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-001:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-002:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-011:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-012:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-013:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:MTC-NotEnb.PROC"}
-		{"CWM-CWS04:WtrC-YSV-014:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1",""}
+		{"CWM-CWS04:WtrC-YSV-014:MovTim","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-001:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-001:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-002:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-002:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-011:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-011:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-012:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-012:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-013:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-013:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:CloseLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:OpenLimNotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-YSV-014:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-YSV-014:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-001:MTC-NotEnb-Sync.PROC"}		
+		{"CWM-CWS04:WtrC-TCV-001:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-101:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-TCV-101:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-201:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-TCV-201:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-301:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-TCV-301:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-401:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-TCV-401:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1","CWM-CWS04:WtrC-TCV-501:MTC-NotEnb-Sync.PROC"}
+		{"CWM-CWS04:WtrC-TCV-501:MTC-NotEnb","Passive","CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck","1",""}
 }

@@ -12,7 +12,7 @@
 #
 # Parameters and Configurations
 #
-epicsEnvSet("PLC_ADDRESS", "10.6.0.56")
+epicsEnvSet("PLC_ADDRESS", "192.168.1.1")
 epicsEnvSet("RECVTIMEOUT", "3000")
 epicsEnvSet("AUTOSAVE_TOP", "/iocs/dtl-skid/autosave/")
 epicsEnvSet("IOCNAME", "cwm-cws04_ctrl-plc-001")
