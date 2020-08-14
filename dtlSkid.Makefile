@@ -190,7 +190,9 @@ endif
 # VENDOR_LIBS += $(SUPPORT)/os/linux-x86_64/libflycapture.so
 
 
+DTLSKID_SUBDIRS = scripts
 
+SCRIPTS += $(foreach path, $(DTLSKID_SUBDIRS), $(wildcard $(APP)/$(path)/*.cmd) $(wildcard $(APP)/$(path)/*/*.cmd))
 SCRIPTS += $(wildcard ../iocsh/*.iocsh)
 
 

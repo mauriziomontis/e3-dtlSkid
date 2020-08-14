@@ -12,16 +12,25 @@
 #
 # Parameters and Configurations
 #
+
+epicsEnvSet("CTRL_PLC_VERSION", "plcfactory")
+epicsEnvSet("AUTOSAVE_VERSION", "5.10.0")
+epicsEnvSet("DTLSKID_VERSION", "master")
+
+
 epicsEnvSet("PLC_ADDRESS", "192.168.1.1")
 epicsEnvSet("RECVTIMEOUT", "3000")
 epicsEnvSet("AUTOSAVE_TOP", "/iocs/dtl-skid/autosave/")
 epicsEnvSet("IOCNAME", "cwm-cws04_ctrl-plc-001")
 
+epicsEnvSet("SCRIPTEXEC",        "${SCRIPTEXEC=iocshLoad}")
+epicsEnvSet("DTL_SKID_ROOT",     "${E3_SITEMODS_PATH}/dtlSkid/${DTLSKID_VERSION}/")
+epicsEnvSet("DTL_SKID_DB",       "${DTL_SKID_ROOT}db/")
 #
 # Required Modules
 #
-require cwm-cws04_ctrl-plc-001,plcfactory
-require autosave,5.10.0
+require cwm-cws04_ctrl-plc-001, ${CTRL_PLC_VERSION}
+require autosave, ${AUTOSAVE_VERSION}
 
 #
 # PLC Communication Setup 
@@ -71,6 +80,14 @@ loadIocsh("autosave.iocsh", "AS_TOP=$(AUTOSAVE_TOP),IOCNAME=$(IOCNAME)")
 dbLoadRecords("cwm-cws04_ctrl-plc-001.db", "PLCNAME=CWM-CWS04:Ctrl-PLC-001, MODVERSION=$(cwm-cws04_ctrl-plc-001_VERSION), S7_PORT=2000, MODBUS_PORT=502")
 dbLoadRecords("cwm-cws04_ctrl-plc-001-sync.db")
 dbLoadTemplate("cwm-cws04_ctrl-plc-001-sync.substitutions")
+
+#
+# Post Init - Set Record Fields
+#
+# 1. Temperature alarms
+${SCRIPTEXEC} "${DTL_SKID_ROOT}postInitTemperatureAlarms.cmd", "SECTION_NAME=CWM-CWS04, DEVICE=TCV, DEVICE_POS=001, SIGNAL=FBL-, LOLO=0, LLSV=MAJOR, LOW=10, LSV=MINOR, HIGH=40, HSV=MINOR, HIHI=45, HHSV=MAJOR, HYST=3"
+
+
 
 
 #
