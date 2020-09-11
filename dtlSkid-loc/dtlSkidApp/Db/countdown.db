@@ -1,0 +1,15 @@
+# Countdown for Skid synchronization
+# Record used to visualize countdown related to data synchronization operation between EPICS and PLC
+#
+# Developed by Maurizio Montis | INFN-LNL
+
+record(calc, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncCountDown") {
+	field(DESC, "Sychro countdown")
+	field(SCAN, "1 second")
+	field(PINI, "YES")
+	field(INPA, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncCountDown")
+	field(INPB, "0")
+	field(CALC, "A=B?0:A-1")
+	field(VAL, "0")
+	field(EGU, "secs")
+}

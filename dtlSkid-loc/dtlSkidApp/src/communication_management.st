@@ -51,8 +51,8 @@ int EPICS_LOCK_SYNC;
 assign EPICS_LOCK_SYNC to "CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck";
 monitor EPICS_LOCK_SYNC;
 
-//string smStatus;
-//assign smStatus to "CWM-CWS04:Ctrl-Intf-001:SMStat";
+int EPICS_COUNTDOWN;
+assign EPICS_COUNTDOWN to "CWM-CWS04:Ctrl-Intf-001:EPICSSyncCountDown";
 
 
 /* Configurations" */ 
@@ -104,6 +104,12 @@ ss communication_management {
 	
 /* state SYNC DONE */ 
 	state syncDone {
+
+		entry {
+			EPICS_COUNTDOWN=wait_sync;
+			pvPut(EPICS_COUNTDOWN);
+			if (DEBUG == 1) { printf("[SEQ Message] Started sync countdown: %d seconds\n", EPICS_COUNTDOWN); }
+		}
 		when(delay(wait_sync)) {
 			/* Set EPICS CODE to 0xDD22 [-8926] */
 			EPICS_CODE=-8926;
