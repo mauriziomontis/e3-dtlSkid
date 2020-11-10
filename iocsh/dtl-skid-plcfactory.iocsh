@@ -1,11 +1,11 @@
 # DTL SKID Application - plcfactory generated application
 # developed by Maurizio Montis | INFN-LNL
-# 
+#
 
 #
 # Parameters
-# 
-epicsEnvSet("PLC_ADDRESS", "10.6.0.56")
+#
+epicsEnvSet("PLC_ADDRESS", "192.168.1.1")
 epicsEnvSet("RECV_TIMEOUT", "3000")
 
 

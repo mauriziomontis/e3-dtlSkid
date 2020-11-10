@@ -18,14 +18,13 @@
 # Changelog:
 # V1.0:
 #      - initial setup
-#  
+#
 
 record(calcout, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncLck")
 {
-	field(DESC, "PV sync lock system") 
+	field(DESC, "PV sync lock system")
 	field(SCAN, ".1 second")
 	field(INPA, "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg")
-	#field(INPB, "CWM-CWS04:Ctrl-Intf-001:EPICSCommMsg")
 	field(CALC, "(A=-188)?1:0")
 
 }
@@ -36,8 +35,6 @@ record(ao, "CWM-CWS04:Ctrl-Intf-001:EPICSExecSync") {
 	field(OMSL, "supervisory")
 	field(PINI, "YES")
 	field(VAL, "0")
-	#field(OUT, "CWM-CWS04:WtrC-YSV-001:MovTim-Sync.PROC CP")
-	#field(OUT, "CWM-CWS04:WtrC-CIT-001:Ilck-NotEnb-Sync.PROC CP")
 	field(FLNK, "CWM-CWS04:Ctrl-Intf-001:EPICSSyncFout")
 }
 
