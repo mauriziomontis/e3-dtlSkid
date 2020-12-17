@@ -192,3 +192,4 @@ ${SCRIPTEXEC} "${DTL_SKID_ROOT}postInitPressureAlarms.cmd", "SECTION_NAME=DTL-05
 # SQL State Machine
 #
 afterInit(seq DtlSkid_communication)
+afterInit(seq cooling_statemachine)
