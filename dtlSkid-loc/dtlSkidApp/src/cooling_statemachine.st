@@ -1112,106 +1112,31 @@ ss  cooling_statemachine {
         pvPut(StateMachineCode);
       }
 
-      when ( pvConnectCount()==pvAssignCount() ) {
-        printf("[SEQ COOLING] All PVs connected\n");
+      /* Start control only when skid is in remote control */
+      when ( (pvConnectCount()==pvAssignCount()) && (PLC_Message == -188) ) {
+        printf("[SEQ COOLING] All PVs connected and System in Remote control\n");
         printf("[SEQ COOLING] Starting Self Check Process\n");
 
-        /* [Man|Auto] Control Actual Value initialization */
-        AutoControl_ActualStatus = AutoControlCmd;
-        if ( AutoControl_ActualStatus == 0 ) {
-          printf("[SEQ COOLING] Manual|Auto Steerers Control readback initialized to: MANUAL\n");
-        }
-        else if ( AutoControl_ActualStatus == 1 ) {
-          printf("[SEQ COOLING] Manual|Auto Steerers Control readback initialized to: AUTO\n");
-        }
-        pvPut(AutoControl_ActualStatus);
-      } state self_check
+       state self_check
 	}
 
 
 /* state SELF_CHECK	*/
 	state self_check {
-    entry {
+      entry {
         printf("\n[SEQ COOLING] Enter in SELF CHECK status\n");
         StateMachineCode=10;
         pvPut(StateMachineCode);
-    }
+      }
 
     /* Chassis disconnected (HW) */
-    when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
+      when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
         printf("[SEQ COOLING] Error in chassis enable system: one or more chassis are not available\n");
         printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
-    } state failure
+      } state failure
 
 
-    /* no error in any line */
-    when ( (T1_V1_Termal_OkStat == 1) && (T1_H1_Termal_OkStat == 1) && (T1_V2_Termal_OkStat == 1) && (T1_H2_Termal_OkStat == 1) && (T1_V3_Termal_OkStat == 1) && (T1_H3_Termal_OkStat == 1) && (T1_V4_Termal_OkStat == 1) && (T1_H4_Termal_OkStat == 1) && (T1_V5_Termal_OkStat == 1) && (T1_H5_Termal_OkStat == 1) && (T1_V6_Termal_OkStat == 1) && (T1_H6_Termal_OkStat == 1) && (T2_V1_Termal_OkStat == 1) && (T2_H1_Termal_OkStat == 1) && (T2_V2_Termal_OkStat == 1) && (T2_H2_Termal_OkStat == 1) && (T2_V3_Termal_OkStat == 1) && (T2_H3_Termal_OkStat == 1) && (T3_V1_Termal_OkStat == 1) && (T3_H1_Termal_OkStat == 1) && (T3_V2_Termal_OkStat == 1) && (T3_H2_Termal_OkStat == 1) && (T4_V1_Termal_OkStat == 1) && (T4_H1_Termal_OkStat == 1) && (T4_V2_Termal_OkStat == 1) && (T4_H2_Termal_OkStat == 1) && (T5_V1_Termal_OkStat == 1) && (T5_H1_Termal_OkStat == 1) && (T5_V2_Termal_OkStat == 1) && (T5_H2_Termal_OkStat == 1) ) {
-        printf("[SEQ COOLING] Self Check Passed. \n");
-        printf("[SEQ COOLING] Enable steerers channels. \n");
-
-        /* NOTE: when steerer is swithced ON, the device goes to the last setpoint set. */
-        /*       pay attention if the behavior is correct according to the general operations */
-        T1_V1_ChEnableCmd = 1;
-        pvPut(T1_V1_ChEnableCmd);
-        T1_H1_ChEnableCmd = 1;
-        pvPut(T1_H1_ChEnableCmd);
-        T1_V2_ChEnableCmd = 1;
-        pvPut(T1_V2_ChEnableCmd);
-        T1_H2_ChEnableCmd = 1;
-        pvPut(T1_H2_ChEnableCmd);
-        T1_V3_ChEnableCmd = 1;
-        pvPut(T1_V3_ChEnableCmd);
-        T1_H3_ChEnableCmd = 1;
-        pvPut(T1_H3_ChEnableCmd);
-        T1_V4_ChEnableCmd = 1;
-        pvPut(T1_V4_ChEnableCmd);
-        T1_H4_ChEnableCmd = 1;
-        pvPut(T1_H4_ChEnableCmd);
-        T1_V5_ChEnableCmd = 1;
-        pvPut(T1_V5_ChEnableCmd);
-        T1_H5_ChEnableCmd = 1;
-        pvPut(T1_H5_ChEnableCmd);
-        T1_V6_ChEnableCmd = 1;
-        pvPut(T1_V6_ChEnableCmd);
-        T1_H6_ChEnableCmd = 1;
-        pvPut(T1_H6_ChEnableCmd);
-        T2_V1_ChEnableCmd = 1;
-        pvPut(T2_V1_ChEnableCmd);
-        T2_H1_ChEnableCmd = 1;
-        pvPut(T2_H1_ChEnableCmd);
-        T2_V2_ChEnableCmd = 1;
-        pvPut(T2_V2_ChEnableCmd);
-        T2_H2_ChEnableCmd = 1;
-        pvPut(T2_H2_ChEnableCmd);
-        T2_V3_ChEnableCmd = 1;
-        pvPut(T2_V3_ChEnableCmd);
-        T2_H3_ChEnableCmd = 1;
-        pvPut(T2_H3_ChEnableCmd);
-        T3_V1_ChEnableCmd = 1;
-        pvPut(T3_V1_ChEnableCmd);
-        T3_H1_ChEnableCmd = 1;
-        pvPut(T3_H1_ChEnableCmd);
-        T3_V2_ChEnableCmd = 1;
-        pvPut(T3_V2_ChEnableCmd);
-        T3_H2_ChEnableCmd = 1;
-        pvPut(T3_H2_ChEnableCmd);
-        T4_V1_ChEnableCmd = 1;
-        pvPut(T4_V1_ChEnableCmd);
-        T4_H1_ChEnableCmd = 1;
-        pvPut(T4_H1_ChEnableCmd);
-        T4_V2_ChEnableCmd = 1;
-        pvPut(T4_V2_ChEnableCmd);
-        T4_H2_ChEnableCmd = 1;
-        pvPut(T4_H2_ChEnableCmd);
-        T5_V1_ChEnableCmd = 1;
-        pvPut(T5_V1_ChEnableCmd);
-        T5_H1_ChEnableCmd = 1;
-        pvPut(T5_H1_ChEnableCmd);
-        T5_V2_ChEnableCmd = 1;
-        pvPut(T5_V2_ChEnableCmd);
-        T5_H2_ChEnableCmd = 1;
-        pvPut(T5_H2_ChEnableCmd);
-    } state start_up
+  
 
   }
 
