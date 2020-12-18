@@ -1129,14 +1129,11 @@ ss  cooling_statemachine {
         pvPut(StateMachineCode);
       }
 
-    /* Chassis disconnected (HW) */
-      when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
-        printf("[SEQ COOLING] Error in chassis enable system: one or more chassis are not available\n");
+    /* Error: Temperature sensors status not ok */
+      when ( (T0_Temperature_Status == 0) || (T1_Temperature_Status == 0) || (T3_Temperature_Status == 0) || (T4_Temperature_Status == 0) || (T5_Temperature_Status == 0) ) {
+        printf("[SEQ COOLING] Error in temperature sensors: one or more devices are not ok\n");
         printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
       } state failure
-
-
-  
 
   }
 
@@ -1149,37 +1146,7 @@ state start_up {
     pvPut(StateMachineCode);
   }
 
-  /* Channels are not enabled */
-  when ( (T1_V1_ChEnable == 0) || (T1_H1_ChEnable == 0) || (T1_V2_ChEnable == 0) || (T1_H2_ChEnable == 0) || (T1_V3_ChEnable == 0) || (T1_H3_ChEnable == 0) || (T1_V4_ChEnable == 0) || (T1_H4_ChEnable == 0) || (T1_V5_ChEnable == 0) || (T1_H5_ChEnable == 0) || (T1_V6_ChEnable == 0) || (T1_H6_ChEnable == 0) || (T2_V1_ChEnable == 0) || (T2_H1_ChEnable == 0) || (T2_V2_ChEnable == 0) || (T2_H2_ChEnable == 0) || (T2_V3_ChEnable == 0) || (T2_H3_ChEnable == 0) || (T3_V1_ChEnable == 0) || (T3_H1_ChEnable == 0) || (T3_V2_ChEnable == 0) || (T3_H2_ChEnable == 0) || (T4_V1_ChEnable == 0) || (T4_H1_ChEnable == 0) || (T4_V2_ChEnable == 0) || (T4_H2_ChEnable == 0) || (T5_V1_ChEnable == 0) || (T5_H1_ChEnable == 0) || (T5_V2_ChEnable == 0) || (T5_H2_ChEnable == 0) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] One or more channels are not enabled \n");
-      printf("[SEQ COOLING] Try to rescan the system status \n");
-  } state self_check
 
-  when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
-      printf("[SEQ COOLING] Error in chassis enable system: one or more chassis are not available\n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
-
-  /* Thermas Switch problem */
-  when ( (T1_V1_Termal_OkStat == 0) || (T1_H1_Termal_OkStat == 0) || (T1_V2_Termal_OkStat == 0) || (T1_H2_Termal_OkStat == 0) || (T1_V3_Termal_OkStat == 0) || (T1_H3_Termal_OkStat == 0) || (T1_V4_Termal_OkStat == 0) || (T1_H4_Termal_OkStat == 0) || (T1_V5_Termal_OkStat == 0) || (T1_H5_Termal_OkStat == 0) || (T1_V6_Termal_OkStat == 0) || (T1_H6_Termal_OkStat == 0) || (T2_V1_Termal_OkStat == 0) || (T2_H1_Termal_OkStat == 0) || (T2_V2_Termal_OkStat == 0) || (T2_H2_Termal_OkStat == 0) || (T2_V3_Termal_OkStat == 0) || (T2_H3_Termal_OkStat == 0) || (T3_V1_Termal_OkStat == 0) || (T3_H1_Termal_OkStat == 0) || (T3_V2_Termal_OkStat == 0) || (T3_H2_Termal_OkStat == 0) || (T4_V1_Termal_OkStat == 0) || (T4_H1_Termal_OkStat == 0) || (T4_V2_Termal_OkStat == 0) || (T4_H2_Termal_OkStat == 0) || (T5_V1_Termal_OkStat == 0) || (T5_H1_Termal_OkStat == 0) || (T5_V2_Termal_OkStat == 0) || (T5_H2_Termal_OkStat == 0) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] Error in line enable system: thermal switch problem in one or more lines \n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
-
-  /* 24V Error */
-  when ( (Rack010_24V == 0) || (Rack030_24V == 0) ) {
-      printf("[SEQ COOLING] Error in 24V power racks. \n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
-
-  /* Problems with steerers impedances */
-  when ( (T1_V1_DeltaImpedance > MAX_DEVIANCE) || (T1_H1_DeltaImpedance > MAX_DEVIANCE) || (T1_V2_DeltaImpedance > MAX_DEVIANCE) || (T1_H2_DeltaImpedance > MAX_DEVIANCE) || (T1_V3_DeltaImpedance > MAX_DEVIANCE) || (T1_H3_DeltaImpedance > MAX_DEVIANCE) || (T1_V4_DeltaImpedance > MAX_DEVIANCE) || (T1_H4_DeltaImpedance > MAX_DEVIANCE) || (T1_V5_DeltaImpedance > MAX_DEVIANCE) || (T1_H5_DeltaImpedance > MAX_DEVIANCE) || (T1_V6_DeltaImpedance > MAX_DEVIANCE) || (T1_H6_DeltaImpedance > MAX_DEVIANCE) || (T2_V1_DeltaImpedance > MAX_DEVIANCE) || (T2_H1_DeltaImpedance > MAX_DEVIANCE) || (T2_V2_DeltaImpedance > MAX_DEVIANCE) || (T2_H2_DeltaImpedance > MAX_DEVIANCE) || (T2_V3_DeltaImpedance > MAX_DEVIANCE) || (T2_H3_DeltaImpedance > MAX_DEVIANCE) || (T3_V1_DeltaImpedance > MAX_DEVIANCE) || (T3_H1_DeltaImpedance > MAX_DEVIANCE) || (T3_V2_DeltaImpedance > MAX_DEVIANCE) || (T3_H2_DeltaImpedance > MAX_DEVIANCE) || (T4_V1_DeltaImpedance > MAX_DEVIANCE) || (T4_H1_DeltaImpedance > MAX_DEVIANCE) || (T4_V2_DeltaImpedance > MAX_DEVIANCE) || (T4_H2_DeltaImpedance > MAX_DEVIANCE) || (T5_V1_DeltaImpedance > MAX_DEVIANCE) || (T5_H1_DeltaImpedance > MAX_DEVIANCE) || (T5_V2_DeltaImpedance > MAX_DEVIANCE) || (T5_H2_DeltaImpedance > MAX_DEVIANCE) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] Error in steerer system: one or more stereres register HIGH IMPEDANCE DEVIANCE \n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
 
 
   /* No problems with steerers channels */
