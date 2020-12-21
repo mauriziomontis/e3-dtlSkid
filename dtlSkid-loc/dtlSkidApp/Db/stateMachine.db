@@ -1,0 +1,21 @@
+# Records for Cooling State machine
+#
+#
+# Stages Code:
+# 	0  -> INIT
+# 	10 -> SELF-CHECK
+# 	20 -> IDLE
+# 	30 -> START-UP
+# 	40 -> READY FOR OPERATION
+# 	50 -> FAILURE
+# 	60 -> MAINTENANCE
+#
+#
+# Defined by Maurizio Montis | INFN-LNL
+# mail: maurizio.montis@lnl.infn.it
+
+record(ai, "DTL:WtrC:StateMachine") {
+	field(DESC, "Steerers State machine code")
+	field(VAL, "0")
+	field(PINI, "YES")
+}

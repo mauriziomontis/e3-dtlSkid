@@ -760,6 +760,107 @@ int T5_Pump_OnStat;
 assign T5_Pump_OnStat to "CWM-CWS04:WtrC-P-501:OnStat";
 monitor T5_Pump_OnStat;
 
+/* Pump device - General Ok Status */ /* 0=NOK|1=OK */
+int T0_Pump_General_Ok_Stat;
+assign T0_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-001:OkStat";
+monitor T0_Pump_General_Ok_Stat;
+int T1_Pump_General_Ok_Stat;
+assign T1_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-101:OkStat";
+monitor T1_Pump_General_Ok_Stat;
+int T2_Pump_General_Ok_Stat;
+assign T2_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-201:OkStat";
+monitor T2_Pump_General_Ok_Stat;
+int T3_Pump_General_Ok_Stat;
+assign T3_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-301:OkStat";
+monitor T3_Pump_General_Ok_Stat;
+int T4_Pump_General_Ok_Stat;
+assign T4_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-401:OkStat";
+monitor T4_Pump_General_Ok_Stat;
+int T5_Pump_General_Ok_Stat;
+assign T5_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-501:OkStat";
+monitor T5_Pump_General_Ok_Stat;
+
+/* Pump device - FC Ok Status */ /* 0=NOK|1=OK */
+int T0_Pump_FC_Ok_Stat;
+assign T0_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-001:FC-OkStat";
+monitor T0_Pump_FC_Ok_Stat;
+int T1_Pump_FC_Ok_Stat;
+assign T1_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-101:FC-OkStat";
+monitor T1_Pump_FC_Ok_Stat;
+int T2_Pump_FC_Ok_Stat;
+assign T2_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-201:FC-OkStat";
+monitor T2_Pump_FC_Ok_Stat;
+int T3_Pump_FC_Ok_Stat;
+assign T3_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-301:FC-OkStat";
+monitor T3_Pump_FC_Ok_Stat;
+int T4_Pump_FC_Ok_Stat;
+assign T4_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-401:FC-OkStat";
+monitor T4_Pump_FC_Ok_Stat;
+int T5_Pump_FC_Ok_Stat;
+assign T5_Pump_FC_Ok_Stat to "CWM-CWS04:WtrC-P-501:FC-OkStat";
+monitor T5_Pump_FC_Ok_Stat;
+
+/* Pump device - LFC Ok Status */ /* 0=NOK|1=OK */
+int T0_Pump_LFC_Ok_Stat;
+assign T0_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-001:LFC-OkStat";
+monitor T0_Pump_LFC_Ok_Stat;
+int T1_Pump_LFC_Ok_Stat;
+assign T1_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-101:LFC-OkStat";
+monitor T1_Pump_LFC_Ok_Stat;
+int T2_Pump_LFC_Ok_Stat;
+assign T2_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-201:LFC-OkStat";
+monitor T2_Pump_LFC_Ok_Stat;
+int T3_Pump_LFC_Ok_Stat;
+assign T3_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-301:LFC-OkStat";
+monitor T3_Pump_LFC_Ok_Stat;
+int T4_Pump_LFC_Ok_Stat;
+assign T4_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-401:LFC-OkStat";
+monitor T4_Pump_LFC_Ok_Stat;
+int T5_Pump_LFC_Ok_Stat;
+assign T5_Pump_LFC_Ok_Stat to "CWM-CWS04:WtrC-P-501:LFC-OkStat";
+monitor T5_Pump_LFC_Ok_Stat;
+
+/* Pump device - LPIC Ok Status */ /* 0=NOK|1=OK */
+int T0_Pump_LPIC_Ok_Stat;
+assign T0_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-001:LPIC-OkStat";
+monitor T0_Pump_LPIC_Ok_Stat;
+int T1_Pump_LPIC_Ok_Stat;
+assign T1_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-101:LPIC-OkStat";
+monitor T1_Pump_LPIC_Ok_Stat;
+int T2_Pump_LPIC_Ok_Stat;
+assign T2_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-201:LPIC-OkStat";
+monitor T2_Pump_LPIC_Ok_Stat;
+int T3_Pump_LPIC_Ok_Stat;
+assign T3_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-301:LPIC-OkStat";
+monitor T3_Pump_LPIC_Ok_Stat;
+int T4_Pump_LPIC_Ok_Stat;
+assign T4_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-401:LPIC-OkStat";
+monitor T4_Pump_LPIC_Ok_Stat;
+int T5_Pump_LPIC_Ok_Stat;
+assign T5_Pump_LPIC_Ok_Stat to "CWM-CWS04:WtrC-P-501:LPIC-OkStat";
+monitor T5_Pump_LPIC_Ok_Stat;
+
+/* Pump device - interlock Ok Status */ /* 0=NOK|1=OK */
+int T0_Pump_Ilck_Ok_Stat;
+assign T0_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-001:Ilck-OkStat";
+monitor T0_Pump_Ilck_Ok_Stat;
+int T1_Pump_Ilck_Ok_Stat;
+assign T1_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-101:Ilck-OkStat";
+monitor T1_Pump_Ilck_Ok_Stat;
+int T2_Pump_Ilck_Ok_Stat;
+assign T2_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-201:Ilck-OkStat";
+monitor T2_Pump_Ilck_Ok_Stat;
+int T3_Pump_Ilck_Ok_Stat;
+assign T3_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-301:Ilck-OkStat";
+monitor T3_Pump_Ilck_Ok_Stat;
+int T4_Pump_Ilck_Ok_Stat;
+assign T4_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-401:Ilck-OkStat";
+monitor T4_Pump_Ilck_Ok_Stat;
+int T5_Pump_Ilck_Ok_Stat;
+assign T5_Pump_Ilck_Ok_Stat to "CWM-CWS04:WtrC-P-501:Ilck-OkStat";
+monitor T5_Pump_Ilck_Ok_Stat;
+
+
 /* Pump device - Error Reset */
 int T0_Pump_Error_Reset;
 assign T0_Pump_Error_Reset to "CWM-CWS04:WtrC-P-001:ErrRstCmd";
@@ -843,10 +944,6 @@ monitor T0_Valve_1_Error_Reset;
 int T0_Valve_2_Error_Reset;
 assign T0_Valve_2_Error_Reset to "CWM-CWS04:WtrC-YSV-002:ErrRstCmd";
 monitor T0_Valve_2_Error_Reset;
-
-
-
-
 
 /* Valve TCV device - enable command */
 int T0_Valve_1_Enable_Cmd;
@@ -1076,7 +1173,7 @@ monitor FaultReset;
 # 	60 -> MAINTENANCE
 */
 int StateMachineCode;
-assign StateMachineCode to "";
+assign StateMachineCode to "DTL:WtrC:StateMachine";
 
 /*
 # DTL Operational State Machine Code:
@@ -1114,7 +1211,7 @@ ss  cooling_statemachine {
 
       /* Start control only when skid is in remote control */
       when ( (pvConnectCount()==pvAssignCount()) && (PLC_Message == -188) ) {
-        printf("[SEQ COOLING] All PVs connected and System in Remote control\n");
+        printf("[SEQ COOLING] All PVs connected and System in Remote Control\n");
         printf("[SEQ COOLING] Starting Self Check Process\n");
 
        state self_check
@@ -1129,11 +1226,42 @@ ss  cooling_statemachine {
         pvPut(StateMachineCode);
       }
 
-    /* Error: Temperature sensors status not ok */
-      when ( (T0_Temperature_Status == 0) || (T1_Temperature_Status == 0) || (T3_Temperature_Status == 0) || (T4_Temperature_Status == 0) || (T5_Temperature_Status == 0) ) {
+      /* Error: Temperature sensors status not ok */
+      when ( (T0_Temperature_Status == 0) || (T1_Temperature_Status == 0) || (T2_Temperature_Status == 0) || (T3_Temperature_Status == 0) || (T4_Temperature_Status == 0) || (T5_Temperature_Status == 0) ) {
         printf("[SEQ COOLING] Error in temperature sensors: one or more devices are not ok\n");
         printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
       } state failure
+
+      /* Error: Temperature sensors interlock status not ok */
+      when ( ((T0_Temperature_Ilk_Status == 0) && (T0_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T1_Temperature_Ilk_Status == 0) && (T1_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T2_Temperature_Ilk_Status == 0) && (T2_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T3_Temperature_Ilk_Status == 0) && (T3_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T4_Temperature_Ilk_Status == 0) && (T4_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T5_Temperature_Ilk_Status == 0) && (T5_Temperature_Ilk_Enable_Cmd_RB == 0)) ) {
+        printf("[SEQ COOLING] Error in temperature sensors - interlock status: one or more devices are not ok\n");
+        printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+      } state failure
+
+      /* Error: Flux sensors status not ok */
+      when ( T0_Flux_Status == 0) || (T1_Flux_Status == 0) || (T2_Flux_Status == 0) || (T3_Flux_Status == 0) || (T4_Flux_Status == 0) || (T5_Flux_Status == 0) ) {
+        printf("[SEQ COOLING] Error in flux sensors: one or more devices are not ok\n");
+        printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+      } state failure
+
+      /* Error: Flux sensors interlock status not ok */
+      when ( ((T0_Flux_Ilk_Status == 0) && (T0_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T1_Flux_Ilk_Status == 0) && (T1_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T2_Flux_Ilk_Status == 0) && (T2_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T3_Flux_Ilk_Status == 0) && (T3_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T4_Flux_Ilk_Status == 0) && (T4_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T5_Flux_Ilk_Status == 0) && (T5_Flux_Ilk_Enable_Cmd_RB == 0)) ) {
+        printf("[SEQ COOLING] Error in flux sensors - interlock status: one or more devices are not ok\n");
+        printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+      } state failure
+
+      /* Error: Pressure sensors status not ok  */
+      when ( (T0_Pressure_1_Status == 0) || (T0_Pressure_2_Status == 0) || (T1_Pressure_1_Status == 0) || (T1_Pressure_2_Status == 0) || (T2_Pressure_1_Status == 0) || (T2_Pressure_2_Status == 0) || (T3_Pressure_1_Status == 0) || (T3_Pressure_2_Status == 0) || (T4_Pressure_1_Status == 0) || (T4_Pressure_2_Status == 0) || (T5_Pressure_1_Status == 0) || (T5_Pressure_2_Status == 0) ) {
+        printf("[SEQ COOLING] Error in pressure sensors: one or more devices are not ok\n");
+        printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+      } state failure
+
+      /* Error: Pressure sensors interlock status not ok  */
+      when ( ((T0_Pressure_1_Ilk_Status == 0) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T0_Pressure_2_Ilk_Status == 0) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T1_Pressure_1_Ilk_Status == 0) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T1_Pressure_2_Ilk_Status == 0) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T2_Pressure_1_Ilk_Status == 0) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T2_Pressure_2_Ilk_Status == 0) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T3_Pressure_1_Ilk_Status == 0) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T3_Pressure_2_Ilk_Status == 0) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T4_Pressure_1_Ilk_Status == 0) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T4_Pressure_2_Ilk_Status == 0) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T5_Pressure_1_Ilk_Status == 0) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T5_Pressure_2_Ilk_Status == 0) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 0)) ) {
+        printf("[SEQ COOLING] Error in pressure sensors - interlock status: one or more devices are not ok\n");
+        printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+      } state failure
+
 
   }
 

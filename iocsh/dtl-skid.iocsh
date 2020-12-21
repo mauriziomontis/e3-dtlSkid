@@ -81,7 +81,11 @@ dbLoadRecords("cwm-cws04_ctrl-plc-001.db", "PLCNAME=CWM-CWS04:Ctrl-PLC-001, MODV
 dbLoadRecords("cwm-cws04_ctrl-plc-001-sync.db")
 dbLoadTemplate("cwm-cws04_ctrl-plc-001-sync.substitutions")
 
+# Synchronization Countdown
 dbLoadRecords("countdown.db")
+
+# State Machine code
+dbLoadRecords("StateMachine.db")
 
 #
 # Post Init - Set Record Fields
