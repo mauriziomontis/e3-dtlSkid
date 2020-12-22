@@ -87,6 +87,12 @@ dbLoadRecords("countdown.db")
 # State Machine code
 dbLoadRecords("StateMachine.db")
 
+# State Machine commands and readback
+dbLoadRecords("dtlCoolingControl.db")
+dbLoadRecords("dbCoolingResetMaintenance.db")
+
+
+
 #
 # Post Init - Set Record Fields
 #

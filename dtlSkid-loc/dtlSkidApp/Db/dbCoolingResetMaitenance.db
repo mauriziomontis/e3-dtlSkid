@@ -1,0 +1,15 @@
+record(bo, "DTL:WtrC:MaintenanceRst") {
+	field(DESC, "DTL Cooling Maintenance Reset")
+	field(PINI, "YES")
+	field(VAL, "0")
+	field(ONAM, "ENABLED")
+	field(ZNAM, "DISABLED")
+}
+
+record(bo, "DTL:WtrC:FaultRst") {
+	field(DESC, "DTL Cooling Failure Reset")
+	field(PINI, "YES")
+	field(VAL, "0")
+	field(ONAM, "ENABLED")
+	field(ZNAM, "DISABLED")
+}

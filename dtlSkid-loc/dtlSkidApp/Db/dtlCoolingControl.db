@@ -1,0 +1,47 @@
+# Control Records for Cooling System
+# set of records required to control DTL Cooling system in different configuartions [man|auto]
+#
+# developed by Maurizio Montis | INFN-LNL
+
+
+record(bo, "DTL:WtrC:AutoCmd") {
+	field(DESC, "Cooling System automatic control ")
+	field(OMSL, "supervisory")
+	field(PINI, "YES")
+	field(VAL, 0)
+	field(ZNAM, "MANUAL")
+	field(ONAM, "AUTO")
+}
+
+record(bo, "DTL:WtrC:AutoCmd-RB") {
+	field(DESC, "Cooling System automatic control readback")
+	field(PINI, "YES")
+	field(VAL, 0)
+	field(ZNAM, "MANUAL")
+	field(ONAM, "AUTO")
+}
+
+record(bo, "DTL:WtrC:OpRun") {
+	field(DESC, "Cooling Sys start operations")
+	field(PINI, "YES")
+	field(VAL, 0)
+	field(ZNAM, "NOT START")
+	field(ONAM, "START")
+}
+
+record(bo, "DTL:WtrC:OpStop") {
+	field(DESC, "Cooling Sys stop operations")
+	field(PINI, "YES")
+	field(VAL, 0)
+	field(ZNAM, "NOT STOP")
+	field(ONAM, "STOP")
+}
+
+
+record(bo, "DTL:WtrC:TestDone") {
+	field(DESC, "Cooling Sys confirm aman startup")
+	field(PINI, "YES")
+	field(VAL, 0)
+	field(ZNAM, "NOT DONE")
+	field(ONAM, "DONE")
+}

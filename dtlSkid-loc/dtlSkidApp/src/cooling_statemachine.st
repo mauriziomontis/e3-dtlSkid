@@ -1,4 +1,4 @@
-/* DTL Cooling State Machine
+MAX_PRESS_CHECK) ||MAX_FLUX_CHECK) ||/* DTL Cooling State Machine
 # State Machine devoted to control the status and the health of DTL cooling sub-system :
 #
 # Principal States:
@@ -1176,17 +1176,21 @@ monitor PLC_Message;
 
 /* Manual/Auto Control  */
 int AutoControlCmd;
-assign AutoControlCmd to "";
+assign AutoControlCmd to "DTL:WtrC:AutoCmd";
 monitor AutoControlCmd;
 
 int AutoControl_ActualStatus;
-assign AutoControl_ActualStatus to "";
+assign AutoControl_ActualStatus to "DTL:WtrC:AutoCmd-RB";
 monitor AutoControl_ActualStatus;
 
+/* Manual Test Procedure Completed Command*/
+int Manual_Test_Done;
+assign Manual_Test_Done to "DTL:WtrC:TestDone";
+monitor Manual_Test_Done;
 
 /* Start and Stop Operations */
 int StartOperationCmd;
-assign StartOperationCmd to "";
+assign StartOperationCmd to "DTL:WtrC:OpRun";
 monitor StartOperationCmd;
 int StopOperationCmd;
 assign StopOperationCmd to "";
@@ -1194,7 +1198,7 @@ monitor StopOperationCmd;
 
 /* Maintenance and fault control*/
 int MaintenanceReset;
-assign MaintenanceReset to "";
+assign MaintenanceReset to "DTL:WtrC:OpStop";
 monitor MaintenanceReset;
 int FaultReset;
 assign FaultReset to "";
@@ -1227,6 +1231,15 @@ assign StateMachineCode to "DTL:WtrC:StateMachine";
 int dtlOperationalCode;
 assign dtlOperationalCode to "DTL::StateMachine";
 monitor dtlOperationalCode;
+
+
+
+/* Constants */
+double MAX_FLUX_CHECK=10;
+double MIN_FLUX_CHECK=3;
+double MAX_PRESS_CHECK=10;
+double MIN_PRESS_CHECK=3;
+
 
 
 /* Debug Mode: */
@@ -1351,15 +1364,179 @@ ss  cooling_statemachine {
 
       /* Lost remote connection to PLC */
       when (PLC_Message != -188) {
-        printf("[SEQ COOLING] Communication to PLC not in Remote: one or more events modified commucation status\n");
+        printf("[SEQ COOLING] Communication to PLC not in Remote: one or more events modified communication status\n");
         printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
       } state initialization
 
-      /* No error in any device */
-      when( (PLC_Message == -188)   )
+      /* No error in any device (and in remote communication) */
+      when( (PLC_Message == -188) && (T0_Temperature_Status == 1) && (T1_Temperature_Status == 1) && (T2_Temperature_Status == 1) && (T3_Temperature_Status == 1) && (T4_Temperature_Status == 1) && (T5_Temperature_Status == 1) && ((T0_Temperature_Ilk_Status == 1) && (T0_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T1_Temperature_Ilk_Status == 1) && (T1_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T2_Temperature_Ilk_Status == 1) && (T2_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T3_Temperature_Ilk_Status == 1) && (T3_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T4_Temperature_Ilk_Status == 1) && (T4_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T5_Temperature_Ilk_Status == 1) && (T5_Temperature_Ilk_Enable_Cmd_RB == 1)) && ( T0_Flux_Status == 1) && (T1_Flux_Status == 1) && (T2_Flux_Status == 1) && (T3_Flux_Status == 1) && (T4_Flux_Status == 1) && (T5_Flux_Status == 1) && ((T0_Flux_Ilk_Status == 1) && (T0_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T1_Flux_Ilk_Status == 1) && (T1_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T2_Flux_Ilk_Status == 1) && (T2_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T3_Flux_Ilk_Status == 1) && (T3_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T4_Flux_Ilk_Status == 1) && (T4_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T5_Flux_Ilk_Status == 1) && (T5_Flux_Ilk_Enable_Cmd_RB == 1)) && (T0_Pressure_1_Status == 1) && (T0_Pressure_2_Status == 1) && (T1_Pressure_1_Status == 1) && (T1_Pressure_2_Status == 1) && (T2_Pressure_1_Status == 1) && (T2_Pressure_2_Status == 1) && (T3_Pressure_1_Status == 1) && (T3_Pressure_2_Status == 1) && (T4_Pressure_1_Status == 1) && (T4_Pressure_2_Status == 1) && (T5_Pressure_1_Status == 1) && (T5_Pressure_2_Status == 1) && ((T0_Pressure_1_Ilk_Status == 1) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T0_Pressure_2_Ilk_Status == 1) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T1_Pressure_1_Ilk_Status == 1) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T1_Pressure_2_Ilk_Status == 1) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T2_Pressure_1_Ilk_Status == 1) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T2_Pressure_2_Ilk_Status == 1) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T3_Pressure_1_Ilk_Status == 1) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T3_Pressure_2_Ilk_Status == 1) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T4_Pressure_1_Ilk_Status == 1) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T4_Pressure_2_Ilk_Status == 1) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T5_Pressure_1_Ilk_Status == 1) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T5_Pressure_2_Ilk_Status == 1) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && (T0_Pump_General_Ok_Status == 1) && (T1_Pump_General_Ok_Status == 1) && (T2_Pump_General_Ok_Status == 1) && (T3_Pump_General_Ok_Status == 1) && (T4_Pump_General_Ok_Status == 1) && (T5_Pump_General_Ok_Status == 1) && (T0_Pump_FC_Ok_Status == 1) && (T1_Pump_FC_Ok_Status == 1) && (T2_Pump_FC_Ok_Status == 1) && (T3_Pump_FC_Ok_Status == 1) && (T4_Pump_FC_Ok_Status == 1) && (T5_Pump_FC_Ok_Status == 1) && (T0_Pump_LFC_Ok_Status == 1) && (T1_Pump_LFC_Ok_Status == 1) && (T2_Pump_LFC_Ok_Status == 1) && (T3_Pump_LFC_Ok_Status == 1) && (T4_Pump_LFC_Ok_Status == 1) && (T5_Pump_LFC_Ok_Status == 1) && (T0_Pump_LPIC_Ok_Status == 1) && (T1_Pump_LPIC_Ok_Status == 1) && (T2_Pump_LPIC_Ok_Status == 1) && (T3_Pump_LPIC_Ok_Status == 1) && (T4_Pump_LPIC_Ok_Status == 1) && (T5_Pump_LPIC_Ok_Status == 1) && (T0_Pump_Ilck_Ok_Status == 1) && (T1_Pump_Ilck_Ok_Status == 1) && (T2_Pump_Ilck_Ok_Status == 1) && (T3_Pump_Ilck_Ok_Status == 1) && (T4_Pump_Ilck_Ok_Status == 1) && (T5_Pump_Ilck_Ok_Status == 1) && (T0_Valve_1_Ok_Stat == 1) && (T0_Valve_2_Ok_Stat == 1) && (T0_Valve_1_General_Status == 1) && (T1_Valve_1_General_Status == 1) && (T2_Valve_1_General_Status == 1) && (T3_Valve_1_General_Status == 1) && (T4_Valve_1_General_Status == 1) && (T5_Valve_1_General_Status == 1) && (T0_Valve_1_Ilck_Status == 1) && (T1_Valve_1_Ilck_Status == 1) && (T2_Valve_1_Ilck_Status == 1) && (T3_Valve_1_Ilck_Status == 1) && (T4_Valve_1_Ilck_Status == 1) && (T5_Valve_1_Ilck_Status == 1) ) {
+          printf("[SEQ COOLING] Self Check Passed. \n");
+          /* enable pumps */
+          printf("[SEQ COOLING] Enable pumps. \n");
+          T0_Pump_Enable_Cmd=1;
+          pvPut(T0_Pump_Enable_Cmd);
+          T1_Pump_Enable_Cmd=1;
+          pvPut(T1_Pump_Enable_Cmd);
+          T2_Pump_Enable_Cmd=1;
+          pvPut(T2_Pump_Enable_Cmd);
+          T3_Pump_Enable_Cmd=1;
+          pvPut(T3_Pump_Enable_Cmd);
+          T4_Pump_Enable_Cmd=1;
+          pvPut(T4_Pump_Enable_Cmd);
+          T5_Pump_Enable_Cmd=1;
+          pvPut(T5_Pump_Enable_Cmd);
+          /* enable valves */
+          printf("[SEQ COOLING] Enable YSV valves. \n");
+          T0_Valve_1_Enable_Cmd=1;
+          pvPut(T0_Valve_1_Enable_Cmd);
+          T0_Valve_2_Enable_Cmd=1;
+          pvPut(T0_Valve_2_Enable_Cmd);
+          printf("[SEQ COOLING] Enable TCV valves. \n");
+          T0_Valve_1_Enable_Cmd=1;
+          pvPut(T0_Valve_1_Enable_Cmd);
+          T1_Valve_1_Enable_Cmd=1;
+          pvPut(T1_Valve_1_Enable_Cmd);
+          T2_Valve_1_Enable_Cmd=1;
+          pvPut(T2_Valve_1_Enable_Cmd);
+          T3_Valve_1_Enable_Cmd=1;
+          pvPut(T3_Valve_1_Enable_Cmd);
+          T4_Valve_1_Enable_Cmd=1;
+          pvPut(T4_Valve_1_Enable_Cmd);
+          T5_Valve_1_Enable_Cmd=1;
+          pvPut(T5_Valve_1_Enable_Cmd);
 
+    } state idle
 
   }
+
+
+
+/* state IDLE   	*/
+  state idle {
+    entry {
+      printf("\n[SEQ COOLING] Enter in IDLE status\n");
+      StateMachineCode=20;
+      pvPut(StateMachineCode);
+    }
+
+    /* Error: Temperature sensors status not ok */
+    when ( (T0_Temperature_Status == 0) || (T1_Temperature_Status == 0) || (T2_Temperature_Status == 0) || (T3_Temperature_Status == 0) || (T4_Temperature_Status == 0) || (T5_Temperature_Status == 0) ) {
+      printf("[SEQ COOLING] Error in temperature sensors: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Temperature sensors interlock status not ok */
+    when ( ((T0_Temperature_Ilk_Status == 0) && (T0_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T1_Temperature_Ilk_Status == 0) && (T1_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T2_Temperature_Ilk_Status == 0) && (T2_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T3_Temperature_Ilk_Status == 0) && (T3_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T4_Temperature_Ilk_Status == 0) && (T4_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T5_Temperature_Ilk_Status == 0) && (T5_Temperature_Ilk_Enable_Cmd_RB == 0)) ) {
+      printf("[SEQ COOLING] Error in temperature sensors - interlock status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Flux sensors status not ok */
+    when ( T0_Flux_Status == 0) || (T1_Flux_Status == 0) || (T2_Flux_Status == 0) || (T3_Flux_Status == 0) || (T4_Flux_Status == 0) || (T5_Flux_Status == 0) ) {
+      printf("[SEQ COOLING] Error in flux sensors: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Flux sensors interlock status not ok */
+    when ( ((T0_Flux_Ilk_Status == 0) && (T0_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T1_Flux_Ilk_Status == 0) && (T1_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T2_Flux_Ilk_Status == 0) && (T2_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T3_Flux_Ilk_Status == 0) && (T3_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T4_Flux_Ilk_Status == 0) && (T4_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T5_Flux_Ilk_Status == 0) && (T5_Flux_Ilk_Enable_Cmd_RB == 0)) ) {
+      printf("[SEQ COOLING] Error in flux sensors - interlock status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pressure sensors status not ok  */
+    when ( (T0_Pressure_1_Status == 0) || (T0_Pressure_2_Status == 0) || (T1_Pressure_1_Status == 0) || (T1_Pressure_2_Status == 0) || (T2_Pressure_1_Status == 0) || (T2_Pressure_2_Status == 0) || (T3_Pressure_1_Status == 0) || (T3_Pressure_2_Status == 0) || (T4_Pressure_1_Status == 0) || (T4_Pressure_2_Status == 0) || (T5_Pressure_1_Status == 0) || (T5_Pressure_2_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pressure sensors: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pressure sensors interlock status not ok  */
+    when ( ((T0_Pressure_1_Ilk_Status == 0) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T0_Pressure_2_Ilk_Status == 0) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T1_Pressure_1_Ilk_Status == 0) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T1_Pressure_2_Ilk_Status == 0) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T2_Pressure_1_Ilk_Status == 0) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T2_Pressure_2_Ilk_Status == 0) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T3_Pressure_1_Ilk_Status == 0) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T3_Pressure_2_Ilk_Status == 0) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T4_Pressure_1_Ilk_Status == 0) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T4_Pressure_2_Ilk_Status == 0) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T5_Pressure_1_Ilk_Status == 0) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T5_Pressure_2_Ilk_Status == 0) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 0)) ) {
+      printf("[SEQ COOLING] Error in pressure sensors - interlock status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pumps general status not ok  */
+    when ( (T0_Pump_General_Ok_Status == 0) || (T1_Pump_General_Ok_Status == 0) || (T2_Pump_General_Ok_Status == 0) || (T3_Pump_General_Ok_Status == 0) || (T4_Pump_General_Ok_Status == 0) || (T5_Pump_General_Ok_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pumps - general status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pumps FC status not ok  */
+    when ( (T0_Pump_FC_Ok_Status == 0) || (T1_Pump_FC_Ok_Status == 0) || (T2_Pump_FC_Ok_Status == 0) || (T3_Pump_FC_Ok_Status == 0) || (T4_Pump_FC_Ok_Status == 0) || (T5_Pump_FC_Ok_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pumps - FC status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pumps LFC status not ok  */
+    when ( (T0_Pump_LFC_Ok_Status == 0) || (T1_Pump_LFC_Ok_Status == 0) || (T2_Pump_LFC_Ok_Status == 0) || (T3_Pump_LFC_Ok_Status == 0) || (T4_Pump_LFC_Ok_Status == 0) || (T5_Pump_LFC_Ok_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pumps - LFC status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pumps LPIC status not ok  */
+    when ( (T0_Pump_LPIC_Ok_Status == 0) || (T1_Pump_LPIC_Ok_Status == 0) || (T2_Pump_LPIC_Ok_Status == 0) || (T3_Pump_LPIC_Ok_Status == 0) || (T4_Pump_LPIC_Ok_Status == 0) || (T5_Pump_LPIC_Ok_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pumps - LPIC status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: Pumps Ilck status not ok  */
+    when ( (T0_Pump_Ilck_Ok_Status == 0) || (T1_Pump_Ilck_Ok_Status == 0) || (T2_Pump_Ilck_Ok_Status == 0) || (T3_Pump_Ilck_Ok_Status == 0) || (T4_Pump_Ilck_Ok_Status == 0) || (T5_Pump_Ilck_Ok_Status == 0) ) {
+      printf("[SEQ COOLING] Error in pumps - Ilck status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: YSV valves status not ok  */
+    when ( (T0_Valve_1_Ok_Stat == 0) || (T0_Valve_2_Ok_Stat == 0) ) {
+      printf("[SEQ COOLING] Error in YSV valves: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: TCV valves general status not ok  */
+    when ( (T0_Valve_1_General_Status == 0) || (T1_Valve_1_General_Status == 0) || (T2_Valve_1_General_Status == 0) || (T3_Valve_1_General_Status == 0) || (T4_Valve_1_General_Status == 0) || (T5_Valve_1_General_Status == 0) ) {
+      printf("[SEQ COOLING] Error in TCV valves - general status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Error: TCV valves interlock status not ok  */
+    when ( (T0_Valve_1_Ilck_Status == 0) || (T1_Valve_1_Ilck_Status == 0) || (T2_Valve_1_Ilck_Status == 0) || (T3_Valve_1_Ilck_Status == 0) || (T4_Valve_1_Ilck_Status == 0) || (T5_Valve_1_Ilck_Status == 0) ) {
+      printf("[SEQ COOLING] Error in TCV valves - interlock status: one or more devices are not ok\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state failure
+
+    /* Lost remote connection to PLC */
+    when (PLC_Message != -188) {
+      printf("[SEQ COOLING] Communication to PLC not in Remote: one or more events modified communication status\n");
+      printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+    } state initialization
+
+
+    /* Execute chosen configuration [man|auto] */
+    when ( (PLC_Message == -188) && (StartOperationCmd == 1) ) {
+        if ( (AutoControl_ActualStatus == 0) && (AutoControl_ActualStatus == AutoControlCmd) ) {
+          printf("[SEQ COOLING] Start Control Operations in MANUAL Mode\n");
+        }
+        else if ( (AutoControl_ActualStatus == 1) && (AutoControl_ActualStatus == AutoControlCmd) ) {
+          printf("[SEQ COOLING] Start Control Operations in AUTOMATIC Mode\n");
+        }
+        else if ( (AutoControl_ActualStatus == 1) && (AutoControl_ActualStatus != AutoControlCmd) ) {
+          printf("[SEQ COOLING] Updated control configuration\n");
+          printf("[SEQ COOLING] Start Control Operations in MANUAL Mode\n");
+          AutoControl_ActualStatus = AutoControlCmd;
+          pvPut(AutoControl_ActualStatus);
+        }
+        else if ( (AutoControl_ActualStatus == 0) && (AutoControl_ActualStatus != AutoControlCmd) ) {
+          printf("[SEQ COOLING] Updated control configuration\n");
+          printf("[SEQ COOLING] Start Control Operations in AUTOMATIC Mode\n");
+          AutoControl_ActualStatus = AutoControlCmd;
+          pvPut(AutoControl_ActualStatus);
+        }
+        else {
+          printf("[SEQ COOLING] This message should not appear :)\n");
+        }
+
+    } state start_up
+  }
+
 
 
 /* state STARTUP	*/
@@ -1370,144 +1547,156 @@ state start_up {
     pvPut(StateMachineCode);
   }
 
+  /* Error: Temperature sensors status not ok */
+  when ( (T0_Temperature_Status == 0) || (T1_Temperature_Status == 0) || (T2_Temperature_Status == 0) || (T3_Temperature_Status == 0) || (T4_Temperature_Status == 0) || (T5_Temperature_Status == 0) ) {
+    printf("[SEQ COOLING] Error in temperature sensors: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Temperature sensors interlock status not ok */
+  when ( ((T0_Temperature_Ilk_Status == 0) && (T0_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T1_Temperature_Ilk_Status == 0) && (T1_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T2_Temperature_Ilk_Status == 0) && (T2_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T3_Temperature_Ilk_Status == 0) && (T3_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T4_Temperature_Ilk_Status == 0) && (T4_Temperature_Ilk_Enable_Cmd_RB == 0)) || ((T5_Temperature_Ilk_Status == 0) && (T5_Temperature_Ilk_Enable_Cmd_RB == 0)) ) {
+    printf("[SEQ COOLING] Error in temperature sensors - interlock status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Flux sensors status not ok */
+  when ( T0_Flux_Status == 0) || (T1_Flux_Status == 0) || (T2_Flux_Status == 0) || (T3_Flux_Status == 0) || (T4_Flux_Status == 0) || (T5_Flux_Status == 0) ) {
+    printf("[SEQ COOLING] Error in flux sensors: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Flux sensors interlock status not ok */
+  when ( ((T0_Flux_Ilk_Status == 0) && (T0_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T1_Flux_Ilk_Status == 0) && (T1_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T2_Flux_Ilk_Status == 0) && (T2_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T3_Flux_Ilk_Status == 0) && (T3_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T4_Flux_Ilk_Status == 0) && (T4_Flux_Ilk_Enable_Cmd_RB == 0)) || ((T5_Flux_Ilk_Status == 0) && (T5_Flux_Ilk_Enable_Cmd_RB == 0)) ) {
+    printf("[SEQ COOLING] Error in flux sensors - interlock status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pressure sensors status not ok  */
+  when ( (T0_Pressure_1_Status == 0) || (T0_Pressure_2_Status == 0) || (T1_Pressure_1_Status == 0) || (T1_Pressure_2_Status == 0) || (T2_Pressure_1_Status == 0) || (T2_Pressure_2_Status == 0) || (T3_Pressure_1_Status == 0) || (T3_Pressure_2_Status == 0) || (T4_Pressure_1_Status == 0) || (T4_Pressure_2_Status == 0) || (T5_Pressure_1_Status == 0) || (T5_Pressure_2_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pressure sensors: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pressure sensors interlock status not ok  */
+  when ( ((T0_Pressure_1_Ilk_Status == 0) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T0_Pressure_2_Ilk_Status == 0) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T1_Pressure_1_Ilk_Status == 0) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T1_Pressure_2_Ilk_Status == 0) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T2_Pressure_1_Ilk_Status == 0) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T2_Pressure_2_Ilk_Status == 0) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T3_Pressure_1_Ilk_Status == 0) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T3_Pressure_2_Ilk_Status == 0) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T4_Pressure_1_Ilk_Status == 0) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T4_Pressure_2_Ilk_Status == 0) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 0)) || ((T5_Pressure_1_Ilk_Status == 0) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 0)) ||  ((T5_Pressure_2_Ilk_Status == 0) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 0)) ) {
+    printf("[SEQ COOLING] Error in pressure sensors - interlock status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pumps general status not ok  */
+  when ( (T0_Pump_General_Ok_Status == 0) || (T1_Pump_General_Ok_Status == 0) || (T2_Pump_General_Ok_Status == 0) || (T3_Pump_General_Ok_Status == 0) || (T4_Pump_General_Ok_Status == 0) || (T5_Pump_General_Ok_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pumps - general status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pumps FC status not ok  */
+  when ( (T0_Pump_FC_Ok_Status == 0) || (T1_Pump_FC_Ok_Status == 0) || (T2_Pump_FC_Ok_Status == 0) || (T3_Pump_FC_Ok_Status == 0) || (T4_Pump_FC_Ok_Status == 0) || (T5_Pump_FC_Ok_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pumps - FC status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pumps LFC status not ok  */
+  when ( (T0_Pump_LFC_Ok_Status == 0) || (T1_Pump_LFC_Ok_Status == 0) || (T2_Pump_LFC_Ok_Status == 0) || (T3_Pump_LFC_Ok_Status == 0) || (T4_Pump_LFC_Ok_Status == 0) || (T5_Pump_LFC_Ok_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pumps - LFC status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pumps LPIC status not ok  */
+  when ( (T0_Pump_LPIC_Ok_Status == 0) || (T1_Pump_LPIC_Ok_Status == 0) || (T2_Pump_LPIC_Ok_Status == 0) || (T3_Pump_LPIC_Ok_Status == 0) || (T4_Pump_LPIC_Ok_Status == 0) || (T5_Pump_LPIC_Ok_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pumps - LPIC status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: Pumps Ilck status not ok  */
+  when ( (T0_Pump_Ilck_Ok_Status == 0) || (T1_Pump_Ilck_Ok_Status == 0) || (T2_Pump_Ilck_Ok_Status == 0) || (T3_Pump_Ilck_Ok_Status == 0) || (T4_Pump_Ilck_Ok_Status == 0) || (T5_Pump_Ilck_Ok_Status == 0) ) {
+    printf("[SEQ COOLING] Error in pumps - Ilck status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: YSV valves status not ok  */
+  when ( (T0_Valve_1_Ok_Stat == 0) || (T0_Valve_2_Ok_Stat == 0) ) {
+    printf("[SEQ COOLING] Error in YSV valves: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: TCV valves general status not ok  */
+  when ( (T0_Valve_1_General_Status == 0) || (T1_Valve_1_General_Status == 0) || (T2_Valve_1_General_Status == 0) || (T3_Valve_1_General_Status == 0) || (T4_Valve_1_General_Status == 0) || (T5_Valve_1_General_Status == 0) ) {
+    printf("[SEQ COOLING] Error in TCV valves - general status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Error: TCV valves interlock status not ok  */
+  when ( (T0_Valve_1_Ilck_Status == 0) || (T1_Valve_1_Ilck_Status == 0) || (T2_Valve_1_Ilck_Status == 0) || (T3_Valve_1_Ilck_Status == 0) || (T4_Valve_1_Ilck_Status == 0) || (T5_Valve_1_Ilck_Status == 0) ) {
+    printf("[SEQ COOLING] Error in TCV valves - interlock status: one or more devices are not ok\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state failure
+
+  /* Lost remote connection to PLC */
+  when (PLC_Message != -188) {
+    printf("[SEQ COOLING] Communication to PLC not in Remote: one or more events modified communication status\n");
+    printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
+  } state initialization
+
+  /* Possibility to modify [MAN|AUTO] control during operations without changing state*/
+  when ( AutoControl_ActualStatus != AutoControlCmd ) {
+      AutoControl_ActualStatus = AutoControlCmd;
+      pvPut(AutoControl_ActualStatus);
+      if ( AutoControl_ActualStatus == 0 ) {
+        printf("[SEQ COOLING] Control Configuration changed to MANUAL .\n");
+      }
+      else if ( AutoControl_ActualStatus == 1 ) {
+        printf("[SEQ COOLING] Control Configuration changed to AUTOMATIC.\n");
+      }
+  } state start_up
+
+  /* Test procedure in manual mode */
+	when ( (AutoControl_ActualStatus == 0) && (Manual_Test_Done == 1) ) {
+		printf("[SEQ COOLING] Manual Startup Procedure Completed \n");
+
+	} state ready_for_operation
 
 
 
-  /* No problems with steerers channels */
-  when ( (T1_V1_ChEnable == 1) && (T1_H1_ChEnable == 1) && (T1_V2_ChEnable == 1) && (T1_H2_ChEnable == 1) && (T1_V3_ChEnable == 1) && (T1_H3_ChEnable == 1) && (T1_V4_ChEnable == 1) && (T1_H4_ChEnable == 1) && (T1_V5_ChEnable == 1) && (T1_H5_ChEnable == 1) && (T1_V6_ChEnable == 1) && (T1_H6_ChEnable == 1) && (T2_V1_ChEnable == 1) && (T2_H1_ChEnable == 1) && (T2_V2_ChEnable == 1) && (T2_H2_ChEnable == 1) && (T2_V3_ChEnable == 1) && (T2_H3_ChEnable == 1) && (T3_V1_ChEnable == 1) && (T3_H1_ChEnable == 1) && (T3_V2_ChEnable == 1) && (T3_H2_ChEnable == 1) && (T4_V1_ChEnable == 1) && (T4_H1_ChEnable == 1) && (T4_V2_ChEnable == 1) && (T4_H2_ChEnable == 1) && (T5_V1_ChEnable == 1) && (T5_H1_ChEnable == 1) && (T5_V2_ChEnable == 1) && (T5_H2_ChEnable == 1) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] Channels correctly enabled. Start setpoint reset. \n");
-      T1_V1_CurrentSet = 0;
-      pvPut(T1_V1_CurrentSet);
-      T1_H1_CurrentSet = 0;
-      pvPut(T1_H1_CurrentSet);
-      T1_V2_CurrentSet = 0;
-      pvPut(T1_V2_CurrentSet);
-      T1_H2_CurrentSet = 0;
-      pvPut(T1_H2_CurrentSet);
-      T1_V3_CurrentSet = 0;
-      pvPut(T1_V3_CurrentSet);
-      T1_H3_CurrentSet = 0;
-      pvPut(T1_H3_CurrentSet);
-      T1_V4_CurrentSet = 0;
-      pvPut(T1_V4_CurrentSet);
-      T1_H4_CurrentSet = 0;
-      pvPut(T1_H4_CurrentSet);
-      T1_V5_CurrentSet = 0;
-      pvPut(T1_V5_CurrentSet);
-      T1_H5_CurrentSet = 0;
-      pvPut(T1_H5_CurrentSet);
-      T1_V6_CurrentSet = 0;
-      pvPut(T1_V6_CurrentSet);
-      T1_H6_CurrentSet = 0;
-      pvPut(T1_H6_CurrentSet);
-      T2_V1_CurrentSet = 0;
-      pvPut(T2_V1_CurrentSet);
-      T2_H1_CurrentSet = 0;
-      pvPut(T2_H1_CurrentSet);
-      T2_V2_CurrentSet = 0;
-      pvPut(T2_V2_CurrentSet);
-      T2_H2_CurrentSet = 0;
-      pvPut(T2_H2_CurrentSet);
-      T2_V3_CurrentSet = 0;
-      pvPut(T2_V3_CurrentSet);
-      T2_H3_CurrentSet = 0;
-      pvPut(T2_H3_CurrentSet);
-      T3_V1_CurrentSet = 0;
-      pvPut(T3_V1_CurrentSet);
-      T3_H1_CurrentSet = 0;
-      pvPut(T3_H1_CurrentSet);
-      T3_V2_CurrentSet = 0;
-      pvPut(T3_V2_CurrentSet);
-      T3_H2_CurrentSet = 0;
-      pvPut(T3_H2_CurrentSet);
-      T4_V1_CurrentSet = 0;
-      pvPut(T4_V1_CurrentSet);
-      T4_H1_CurrentSet = 0;
-      pvPut(T4_H1_CurrentSet);
-      T4_V2_CurrentSet = 0;
-      pvPut(T4_V2_CurrentSet);
-      T4_H2_CurrentSet = 0;
-      pvPut(T4_H2_CurrentSet);
-      T5_V1_CurrentSet = 0;
-      pvPut(T5_V1_CurrentSet);
-      T5_H1_CurrentSet = 0;
-      pvPut(T5_H1_CurrentSet);
-      T5_V2_CurrentSet = 0;
-      pvPut(T5_V2_CurrentSet);
-      T5_H2_CurrentSet = 0;
-      pvPut(T5_H2_CurrentSet);
-  } state idle
 
 }
 
 
-/* state IDLE   	*/
-state idle {
-  entry {
-    printf("\n[SEQ COOLING] Enter in IDLE status\n");
-    StateMachineCode=20;
-    pvPut(StateMachineCode);
-  }
+ /* internal state INTERNAL CHECK */
+ state intenal_check {
+     entry {
+       printf("\n[SEQ COOLING] Enter in INTERNAL CHECK status (internal status)\n");
 
-  /* Channels are not enabled */
-  when ( (T1_V1_ChEnable == 0) || (T1_H1_ChEnable == 0) || (T1_V2_ChEnable == 0) || (T1_H2_ChEnable == 0) || (T1_V3_ChEnable == 0) || (T1_H3_ChEnable == 0) || (T1_V4_ChEnable == 0) || (T1_H4_ChEnable == 0) || (T1_V5_ChEnable == 0) || (T1_H5_ChEnable == 0) || (T1_V6_ChEnable == 0) || (T1_H6_ChEnable == 0) || (T2_V1_ChEnable == 0) || (T2_H1_ChEnable == 0) || (T2_V2_ChEnable == 0) || (T2_H2_ChEnable == 0) || (T2_V3_ChEnable == 0) || (T2_H3_ChEnable == 0) || (T3_V1_ChEnable == 0) || (T3_H1_ChEnable == 0) || (T3_V2_ChEnable == 0) || (T3_H2_ChEnable == 0) || (T4_V1_ChEnable == 0) || (T4_H1_ChEnable == 0) || (T4_V2_ChEnable == 0) || (T4_H2_ChEnable == 0) || (T5_V1_ChEnable == 0) || (T5_H1_ChEnable == 0) || (T5_V2_ChEnable == 0) || (T5_H2_ChEnable == 0) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] One or more channels are not enabled \n");
-      printf("[SEQ COOLING] Try to rescan the system status \n");
-  } state self_check
+     }
 
-  when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
-      printf("[SEQ COOLING] Error in chassis enable system: one or more chassis are not available\n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
+     /* Check if fluxes and pressures are NOT good in manual mode  */
+     when ( (AutoControl_ActualStatus == 0) && ( (T0_Flux_Value > MAX_FLUX_CHECK) || (T0_Flux_Value < MIN_FLUX_CHECK) ) && ( (T1_Flux_Value > MAX_FLUX_CHECK) || (T1_Flux_Value < MIN_FLUX_CHECK) ) && ( (T2_Flux_Value  > MAX_FLUX_CHECK) || (T2_Flux_Value < MIN_FLUX_CHECK) ) && ( (T3_Flux_Value  > MAX_FLUX_CHECK) || (T3_Flux_Value < MIN_FLUX_CHECK) ) && ( (T4_Flux_Value  > MAX_FLUX_CHECK) || (T4_Flux_Value < MIN_FLUX_CHECK) ) && ( (T5_Flux_Value > MAX_FLUX_CHECK) || (T5_Flux_Value < MIN_FLUX_CHECK) ) && ( (T0_Pressure_1_Value > MAX_PRESS_CHECK) || (T0_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T0_Pressure_2_Value > MAX_PRESS_CHECK) || (T0_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T1_Pressure_1_Value > MAX_PRESS_CHECK) || (T1_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T1_Pressure_2_Value > MAX_PRESS_CHECK) || (T1_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T2_Pressure_1_Value > MAX_PRESS_CHECK) || (T2_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T2_Pressure_2_Value > MAX_PRESS_CHECK) || (T2_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T3_Pressure_1_Value > MAX_PRESS_CHECK) || (T3_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T3_Pressure_2_Value > MAX_PRESS_CHECK) || (T3_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T4_Pressure_1_Value > MAX_PRESS_CHECK) || (T4_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T4_Pressure_2_Value > MAX_PRESS_CHECK) || (T4_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T5_Pressure_1_Value > MAX_PRESS_CHECK) || (T5_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T5_Pressure_2_Value > MAX_PRESS_CHECK) || (T5_Pressure_2_Value < MIN_PRESS_CHECK) ) ) {
+        printf("[SEQ COOLING] Internal Check in Manual Mode: parameters are NOT ok.\n");
+        printf("[SEQ COOLING] System not passed internal check: go to STARTUP.\n");
 
-  /* Thermas Switch problem */
-  when ( (T1_V1_Termal_OkStat == 0) || (T1_H1_Termal_OkStat == 0) || (T1_V2_Termal_OkStat == 0) || (T1_H2_Termal_OkStat == 0) || (T1_V3_Termal_OkStat == 0) || (T1_H3_Termal_OkStat == 0) || (T1_V4_Termal_OkStat == 0) || (T1_H4_Termal_OkStat == 0) || (T1_V5_Termal_OkStat == 0) || (T1_H5_Termal_OkStat == 0) || (T1_V6_Termal_OkStat == 0) || (T1_H6_Termal_OkStat == 0) || (T2_V1_Termal_OkStat == 0) || (T2_H1_Termal_OkStat == 0) || (T2_V2_Termal_OkStat == 0) || (T2_H2_Termal_OkStat == 0) || (T2_V3_Termal_OkStat == 0) || (T2_H3_Termal_OkStat == 0) || (T3_V1_Termal_OkStat == 0) || (T3_H1_Termal_OkStat == 0) || (T3_V2_Termal_OkStat == 0) || (T3_H2_Termal_OkStat == 0) || (T4_V1_Termal_OkStat == 0) || (T4_H1_Termal_OkStat == 0) || (T4_V2_Termal_OkStat == 0) || (T4_H2_Termal_OkStat == 0) || (T5_V1_Termal_OkStat == 0) || (T5_H1_Termal_OkStat == 0) || (T5_V2_Termal_OkStat == 0) || (T5_H2_Termal_OkStat == 0) ) {
-  /* Line disconnected (HW) */
-      printf("[SEQ COOLING] Error in line enable system: thermal switch problem in one or more lines \n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
+     } state start_up
 
-  /* 24V Error */
-  when ( (Rack010_24V == 0) || (Rack030_24V == 0) ) {
-      printf("[SEQ COOLING] Error in 24V power racks. \n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
+     /* Check if fluxes and pressures are good in manual mode  */
+     when ( (AutoControl_ActualStatus == 0) && ( (T0_Flux_Value < MAX_FLUX_CHECK) && (T0_Flux_Value > MIN_FLUX_CHECK) ) && ( (T1_Flux_Value < MAX_FLUX_CHECK) && (T1_Flux_Value > MIN_FLUX_CHECK) ) && ( (T2_Flux_Value < MAX_FLUX_CHECK) && (T2_Flux_Value > MIN_FLUX_CHECK) ) && ( (T3_Flux_Value < MAX_FLUX_CHECK) && (T3_Flux_Value > MIN_FLUX_CHECK) ) && ( (T4_Flux_Value < MAX_FLUX_CHECK) && (T4_Flux_Value > MIN_FLUX_CHECK) ) && ( (T5_Flux_Value < MAX_FLUX_CHECK) && (T5_Flux_Value > MIN_FLUX_CHECK) ) && ( (T0_Pressure_1_Value < MAX_PRESS_CHECK) && (T0_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T0_Pressure_2_Value < MAX_PRESS_CHECK) && (T0_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T1_Pressure_1_Value < MAX_PRESS_CHECK) && (T1_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T1_Pressure_2_Value < MAX_PRESS_CHECK) && (T1_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T2_Pressure_1_Value < MAX_PRESS_CHECK) && (T2_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T2_Pressure_2_Value < MAX_PRESS_CHECK) && (T2_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T3_Pressure_1_Value < MAX_PRESS_CHECK) && (T3_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T3_Pressure_2_Value < MAX_PRESS_CHECK) && (T3_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T4_Pressure_1_Value < MAX_PRESS_CHECK) && (T4_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T4_Pressure_2_Value < MAX_PRESS_CHECK) && (T4_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T5_Pressure_1_Value < MAX_PRESS_CHECK) && (T5_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T5_Pressure_2_Value < MAX_PRESS_CHECK) && (T5_Pressure_2_Value > MIN_PRESS_CHECK) ) ) {
+        printf("[SEQ COOLING] Internal Check in Manual Mode: parameters are ok.\n");
+        printf("[SEQ COOLING] System passed internal check: go to READY FOR OPERATION.\n");
 
+     } state ready_for_operation
 
-  /* Some PVs are disconnected */
-  when (pvConnectCount() != pvAssignCount()) {
-    printf("[SEQ COOLING] Error in steerer system: one or more PVs are not available for the state machine. \n");
-    printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-  } state failure
+     /* Check if fluxes and pressures are NOT good in automatic mode  */
+     when ( (AutoControl_ActualStatus == 1) && ( (T0_Flux_Value > MAX_FLUX_CHECK) || (T0_Flux_Value < MIN_FLUX_CHECK) ) && ( (T1_Flux_Value > MAX_FLUX_CHECK) || (T1_Flux_Value < MIN_FLUX_CHECK) ) && ( (T2_Flux_Value  > MAX_FLUX_CHECK) || (T2_Flux_Value < MIN_FLUX_CHECK) ) && ( (T3_Flux_Value  > MAX_FLUX_CHECK) || (T3_Flux_Value < MIN_FLUX_CHECK) ) && ( (T4_Flux_Value  > MAX_FLUX_CHECK) || (T4_Flux_Value < MIN_FLUX_CHECK) ) && ( (T5_Flux_Value > MAX_FLUX_CHECK) || (T5_Flux_Value < MIN_FLUX_CHECK) ) && ( (T0_Pressure_1_Value > MAX_PRESS_CHECK) || (T0_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T0_Pressure_2_Value > MAX_PRESS_CHECK) || (T0_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T1_Pressure_1_Value > MAX_PRESS_CHECK) || (T1_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T1_Pressure_2_Value > MAX_PRESS_CHECK) || (T1_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T2_Pressure_1_Value > MAX_PRESS_CHECK) || (T2_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T2_Pressure_2_Value > MAX_PRESS_CHECK) || (T2_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T3_Pressure_1_Value > MAX_PRESS_CHECK) || (T3_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T3_Pressure_2_Value > MAX_PRESS_CHECK) || (T3_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T4_Pressure_1_Value > MAX_PRESS_CHECK) || (T4_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T4_Pressure_2_Value > MAX_PRESS_CHECK) || (T4_Pressure_2_Value < MIN_PRESS_CHECK) ) &&  (T5_Pressure_1_Value > MAX_PRESS_CHECK) || (T5_Pressure_1_Value < MIN_PRESS_CHECK) ) && ( (T5_Pressure_2_Value > MAX_PRESS_CHECK) || (T5_Pressure_2_Value < MIN_PRESS_CHECK) ) ) {
+        printf("[SEQ COOLING] Internal Check in Manual Mode: parameters are NOT ok.\n");
+        printf("[SEQ COOLING] System not passed internal check: go to FAILURE.\n");
 
-  /* Execute chosen configuration [man|auto] */
-  when ( (StartOperationCmd == 1) ) {
-      if ( (AutoControl_ActualStatus == 0) && (AutoControl_ActualStatus == AutoControlCmd) ) {
-        printf("[SEQ COOLING] Start Control Operations in MANUAL Mode\n");
-      }
-      else if ( (AutoControl_ActualStatus == 1) && (AutoControl_ActualStatus == AutoControlCmd) ) {
-        printf("[SEQ COOLING] Start Control Operations in AUTOMATIC Mode\n");
-      }
-      else if ( (AutoControl_ActualStatus == 1) && (AutoControl_ActualStatus != AutoControlCmd) ) {
-        printf("[SEQ COOLING] Updated control configuration\n");
-        printf("[SEQ COOLING] Start Control Operations in MANUAL Mode\n");
-        AutoControl_ActualStatus = AutoControlCmd;
-        pvPut(AutoControl_ActualStatus);
-      }
-      else if ( (AutoControl_ActualStatus == 0) && (AutoControl_ActualStatus != AutoControlCmd) ) {
-        printf("[SEQ COOLING] Updated control configuration\n");
-        printf("[SEQ COOLING] Start Control Operations in AUTOMATIC Mode\n");
-        AutoControl_ActualStatus = AutoControlCmd;
-        pvPut(AutoControl_ActualStatus);
-      }
-      else {
-        printf("[SEQ COOLING] This message should not appear :)\n");
-      }
+     } state failure
 
-  } state ready_for_operation
-}
+     /* Check if fluxes and pressures are good in automatic mode  */
+     when ( (AutoControl_ActualStatus == 1) && ( (T0_Flux_Value < MAX_FLUX_CHECK) && (T0_Flux_Value > MIN_FLUX_CHECK) ) && ( (T1_Flux_Value < MAX_FLUX_CHECK) && (T1_Flux_Value > MIN_FLUX_CHECK) ) && ( (T2_Flux_Value < MAX_FLUX_CHECK) && (T2_Flux_Value > MIN_FLUX_CHECK) ) && ( (T3_Flux_Value < MAX_FLUX_CHECK) && (T3_Flux_Value > MIN_FLUX_CHECK) ) && ( (T4_Flux_Value < MAX_FLUX_CHECK) && (T4_Flux_Value > MIN_FLUX_CHECK) ) && ( (T5_Flux_Value < MAX_FLUX_CHECK) && (T5_Flux_Value > MIN_FLUX_CHECK) ) && ( (T0_Pressure_1_Value < MAX_PRESS_CHECK) && (T0_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T0_Pressure_2_Value < MAX_PRESS_CHECK) && (T0_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T1_Pressure_1_Value < MAX_PRESS_CHECK) && (T1_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T1_Pressure_2_Value < MAX_PRESS_CHECK) && (T1_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T2_Pressure_1_Value < MAX_PRESS_CHECK) && (T2_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T2_Pressure_2_Value < MAX_PRESS_CHECK) && (T2_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T3_Pressure_1_Value < MAX_PRESS_CHECK) && (T3_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T3_Pressure_2_Value < MAX_PRESS_CHECK) && (T3_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T4_Pressure_1_Value < MAX_PRESS_CHECK) && (T4_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T4_Pressure_2_Value < MAX_PRESS_CHECK) && (T4_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T5_Pressure_1_Value < MAX_PRESS_CHECK) && (T5_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T5_Pressure_2_Value < MAX_PRESS_CHECK) && (T5_Pressure_2_Value > MIN_PRESS_CHECK) ) ) {
+        printf("[SEQ COOLING] Internal Check in Manual Mode: parameters are ok.\n");
+        printf("[SEQ COOLING] System passed internal check: go to READY FOR OPERATION.\n");
+
+     } state ready_for_operation
+
+ }
 
 
 /* state READY_FOR_OPERATION 	*/
@@ -1519,62 +1708,10 @@ state idle {
       pvPut(StateMachineCode);
       }
 
-    /* Chassis problem */
-    when ( (Chassis1_enable_RB == 0) || (Chassis2_enable_RB == 0) || (Chassis3_enable_RB == 0) || (Chassis4_enable_RB == 0) || (Chassis5_enable_RB == 0) ) {
-      printf("[SEQ COOLING] Error in chassis enable system: one or more chassis are not available\n");
-      printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-    } state failure
 
-    /* Thermas Switch problem */
-    when ( (T1_V1_Termal_OkStat == 0) || (T1_H1_Termal_OkStat == 0) || (T1_V2_Termal_OkStat == 0) || (T1_H2_Termal_OkStat == 0) || (T1_V3_Termal_OkStat == 0) || (T1_H3_Termal_OkStat == 0) || (T1_V4_Termal_OkStat == 0) || (T1_H4_Termal_OkStat == 0) || (T1_V5_Termal_OkStat == 0) || (T1_H5_Termal_OkStat == 0) || (T1_V6_Termal_OkStat == 0) || (T1_H6_Termal_OkStat == 0) || (T2_V1_Termal_OkStat == 0) || (T2_H1_Termal_OkStat == 0) || (T2_V2_Termal_OkStat == 0) || (T2_H2_Termal_OkStat == 0) || (T2_V3_Termal_OkStat == 0) || (T2_H3_Termal_OkStat == 0) || (T3_V1_Termal_OkStat == 0) || (T3_H1_Termal_OkStat == 0) || (T3_V2_Termal_OkStat == 0) || (T3_H2_Termal_OkStat == 0) || (T4_V1_Termal_OkStat == 0) || (T4_H1_Termal_OkStat == 0) || (T4_V2_Termal_OkStat == 0) || (T4_H2_Termal_OkStat == 0) || (T5_V1_Termal_OkStat == 0) || (T5_H1_Termal_OkStat == 0) || (T5_V2_Termal_OkStat == 0) || (T5_H2_Termal_OkStat == 0) ) {
-    /* Line disconnected (HW) */
-        printf("[SEQ COOLING] Error in line enable system: thermal switch problem in one or more lines \n");
-        printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-    } state failure
+    
 
-    /* 24V Error */
-    when ( (Rack010_24V == 0) || (Rack030_24V == 0) ) {
-        printf("[SEQ COOLING] Error in 24V power racks. \n");
-        printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-    } state failure
 
-    /* Error with Impedance deviance */
-    when ( (T1_V1_DeltaImpedance > MAX_DEVIANCE) || (T1_H1_DeltaImpedance > MAX_DEVIANCE) || (T1_V2_DeltaImpedance > MAX_DEVIANCE) || (T1_H2_DeltaImpedance > MAX_DEVIANCE) || (T1_V3_DeltaImpedance > MAX_DEVIANCE) || (T1_H3_DeltaImpedance > MAX_DEVIANCE) || (T1_V4_DeltaImpedance > MAX_DEVIANCE) || (T1_H4_DeltaImpedance > MAX_DEVIANCE) || (T1_V5_DeltaImpedance > MAX_DEVIANCE) || (T1_H5_DeltaImpedance > MAX_DEVIANCE) || (T1_V6_DeltaImpedance > MAX_DEVIANCE) || (T1_H6_DeltaImpedance > MAX_DEVIANCE) || (T2_V1_DeltaImpedance > MAX_DEVIANCE) || (T2_H1_DeltaImpedance > MAX_DEVIANCE) || (T2_V2_DeltaImpedance > MAX_DEVIANCE) || (T2_H2_DeltaImpedance > MAX_DEVIANCE) || (T2_V3_DeltaImpedance > MAX_DEVIANCE) || (T2_H3_DeltaImpedance > MAX_DEVIANCE) || (T3_V1_DeltaImpedance > MAX_DEVIANCE) || (T3_H1_DeltaImpedance > MAX_DEVIANCE) || (T3_V2_DeltaImpedance > MAX_DEVIANCE) || (T3_H2_DeltaImpedance > MAX_DEVIANCE) || (T4_V1_DeltaImpedance > MAX_DEVIANCE) || (T4_H1_DeltaImpedance > MAX_DEVIANCE) || (T4_V2_DeltaImpedance > MAX_DEVIANCE) || (T4_H2_DeltaImpedance > MAX_DEVIANCE) || (T5_V1_DeltaImpedance > MAX_DEVIANCE) || (T5_H1_DeltaImpedance > MAX_DEVIANCE) || (T5_V2_DeltaImpedance > MAX_DEVIANCE) || (T5_H2_DeltaImpedance > MAX_DEVIANCE) ) {
-    /* Line disconnected (HW) */
-        printf("[SEQ COOLING] Error in steerer system: one or more stereres register HIGH IMPEDANCE DEVIANCE \n");
-        printf("[SEQ COOLING] System not ok: go to FAILURE \n");
-    } state failure
-
-    /* Stop Operation (for every mode of operation) */
-    when ( StopOperationCmd == 1 ) {
-        printf("[SEQ COOLING] Stop Control Operations. System goes back to Idle Status.\n");
-    } state idle
-
-    /* Possibility to modify [MAN|AUTO] control during operations without changing state*/
-    when ( AutoControl_ActualStatus != AutoControlCmd ) {
-        AutoControl_ActualStatus = AutoControlCmd;
-        pvPut(AutoControl_ActualStatus);
-        if ( AutoControl_ActualStatus == 0 ) {
-          printf("[SEQ COOLING] Control Configuration changed to MANUAL .\n");
-        }
-        else if ( AutoControl_ActualStatus == 1 ) {
-          printf("[SEQ COOLING] Control Configuration changed to AUTOMATIC.\n");
-        }
-    } state ready_for_operation
-
-    /* NOTES: */
-    /* Case of Operation: RF Conditioning */
-    /*
-    Conditions:
-     - Steerers are OFF
-     - Setpoints are at 0A
-    */
-    /* Case of Operation: Ready for Beam */
-    /*
-    Conditions:
-     - Steerers are ON
-     - Setpoints are set at "operative" value
-    */
 
   }
 
@@ -1588,76 +1725,10 @@ state idle {
         StateMachineCode=50;
         pvPut(StateMachineCode);
 
-        /* Switch off each steerer channel */
-        T1_V1_ChEnableCmd = 0;
-        pvPut(T1_V1_ChEnableCmd);
-        T1_H1_ChEnableCmd = 0;
-        pvPut(T1_H1_ChEnableCmd);
-        T1_V2_ChEnableCmd = 0;
-        pvPut(T1_V2_ChEnableCmd);
-        T1_H2_ChEnableCmd = 0;
-        pvPut(T1_H2_ChEnableCmd);
-        T1_V3_ChEnableCmd = 0;
-        pvPut(T1_V3_ChEnableCmd);
-        T1_H3_ChEnableCmd = 0;
-        pvPut(T1_H3_ChEnableCmd);
-        T1_V4_ChEnableCmd = 0;
-        pvPut(T1_V4_ChEnableCmd);
-        T1_H4_ChEnableCmd = 0;
-        pvPut(T1_H4_ChEnableCmd);
-        T1_V5_ChEnableCmd = 0;
-        pvPut(T1_V5_ChEnableCmd);
-        T1_H5_ChEnableCmd = 0;
-        pvPut(T1_H5_ChEnableCmd);
-        T1_V6_ChEnableCmd = 0;
-        pvPut(T1_V6_ChEnableCmd);
-        T1_H6_ChEnableCmd = 0;
-        pvPut(T1_H6_ChEnableCmd);
-        T2_V1_ChEnableCmd = 0;
-        pvPut(T2_V1_ChEnableCmd);
-        T2_H1_ChEnableCmd = 0;
-        pvPut(T2_H1_ChEnableCmd);
-        T2_V2_ChEnableCmd = 0;
-        pvPut(T2_V2_ChEnableCmd);
-        T2_H2_ChEnableCmd = 0;
-        pvPut(T2_H2_ChEnableCmd);
-        T2_V3_ChEnableCmd = 0;
-        pvPut(T2_V3_ChEnableCmd);
-        T2_H3_ChEnableCmd = 0;
-        pvPut(T2_H3_ChEnableCmd);
-        T3_V1_ChEnableCmd = 0;
-        pvPut(T3_V1_ChEnableCmd);
-        T3_H1_ChEnableCmd = 0;
-        pvPut(T3_H1_ChEnableCmd);
-        T3_V2_ChEnableCmd = 0;
-        pvPut(T3_V2_ChEnableCmd);
-        T3_H2_ChEnableCmd = 0;
-        pvPut(T3_H2_ChEnableCmd);
-        T4_V1_ChEnableCmd = 0;
-        pvPut(T4_V1_ChEnableCmd);
-        T4_H1_ChEnableCmd = 0;
-        pvPut(T4_H1_ChEnableCmd);
-        T4_V2_ChEnableCmd = 0;
-        pvPut(T4_V2_ChEnableCmd);
-        T4_H2_ChEnableCmd = 0;
-        pvPut(T4_H2_ChEnableCmd);
-        T5_V1_ChEnableCmd = 0;
-        pvPut(T5_V1_ChEnableCmd);
-        T5_H1_ChEnableCmd = 0;
-        pvPut(T5_H1_ChEnableCmd);
-        T5_V2_ChEnableCmd = 0;
-        pvPut(T5_V2_ChEnableCmd);
-        T5_H2_ChEnableCmd = 0;
-        pvPut(T5_H2_ChEnableCmd);
     }
 
     /* System should provide an healthy status to confirm failure reset */
-    /* Check on: Chassis, Thermal Switches, 24V Rack Power */
-    when ( (FaultReset == 1) &&  (Chassis1_enable_RB == 1) && (Chassis2_enable_RB == 1) && (Chassis3_enable_RB == 1) && (Chassis4_enable_RB == 1) && (Chassis5_enable_RB == 1) && (T1_V1_Termal_OkStat == 1) && (T1_H1_Termal_OkStat == 1) && (T1_V2_Termal_OkStat == 1) && (T1_H2_Termal_OkStat == 1) && (T1_V3_Termal_OkStat == 1) && (T1_H3_Termal_OkStat == 1) && (T1_V4_Termal_OkStat == 1) && (T1_H4_Termal_OkStat == 1) && (T1_V5_Termal_OkStat == 1) && (T1_H5_Termal_OkStat == 1) && (T1_V6_Termal_OkStat == 1) && (T1_H6_Termal_OkStat == 1) && (T2_V1_Termal_OkStat == 1) && (T2_H1_Termal_OkStat == 1) && (T2_V2_Termal_OkStat == 1) && (T2_H2_Termal_OkStat == 1) && (T2_V3_Termal_OkStat == 1) && (T2_H3_Termal_OkStat == 1) && (T3_V1_Termal_OkStat == 1) && (T3_H1_Termal_OkStat == 1) && (T3_V2_Termal_OkStat == 1) && (T3_H2_Termal_OkStat == 1) && (T4_V1_Termal_OkStat == 1) && (T4_H1_Termal_OkStat == 1) && (T4_V2_Termal_OkStat == 1) && (T4_H2_Termal_OkStat == 1) && (T5_V1_Termal_OkStat == 1) && (T5_H1_Termal_OkStat == 1) && (T5_V2_Termal_OkStat == 1) && (T5_H2_Termal_OkStat == 1) && (Rack010_24V == 1) && (Rack030_24V == 1) ) {
 
-        printf("[SEQ COOLING] Failure Stage reset by Operator. \n");
-        printf("[SEQ COOLING] Reset conditions satisfied.\n");
-    } state maintenance
 
   }
 
@@ -1672,12 +1743,7 @@ state idle {
     }
 
     /* System should provide an healthy status to confirm failure reset */
-    /* Check on: Chassis, Thermal Switches, 24V Rack Power */
-    when ( (MaintenanceReset == 1) &&  (Chassis1_enable_RB == 1) && (Chassis2_enable_RB == 1) && (Chassis3_enable_RB == 1) && (Chassis4_enable_RB == 1) && (Chassis5_enable_RB == 1) && (T1_V1_Termal_OkStat == 1) && (T1_H1_Termal_OkStat == 1) && (T1_V2_Termal_OkStat == 1) && (T1_H2_Termal_OkStat == 1) && (T1_V3_Termal_OkStat == 1) && (T1_H3_Termal_OkStat == 1) && (T1_V4_Termal_OkStat == 1) && (T1_H4_Termal_OkStat == 1) && (T1_V5_Termal_OkStat == 1) && (T1_H5_Termal_OkStat == 1) && (T1_V6_Termal_OkStat == 1) && (T1_H6_Termal_OkStat == 1) && (T2_V1_Termal_OkStat == 1) && (T2_H1_Termal_OkStat == 1) && (T2_V2_Termal_OkStat == 1) && (T2_H2_Termal_OkStat == 1) && (T2_V3_Termal_OkStat == 1) && (T2_H3_Termal_OkStat == 1) && (T3_V1_Termal_OkStat == 1) && (T3_H1_Termal_OkStat == 1) && (T3_V2_Termal_OkStat == 1) && (T3_H2_Termal_OkStat == 1) && (T4_V1_Termal_OkStat == 1) && (T4_H1_Termal_OkStat == 1) && (T4_V2_Termal_OkStat == 1) && (T4_H2_Termal_OkStat == 1) && (T5_V1_Termal_OkStat == 1) && (T5_H1_Termal_OkStat == 1) && (T5_V2_Termal_OkStat == 1) && (T5_H2_Termal_OkStat == 1) && (Rack010_24V == 1) && (Rack030_24V == 1) ) {
 
-        printf("[SEQ COOLING] Failure Stage reset by Operator. \n");
-        printf("[SEQ COOLING] Reset conditions satisfied.\n");
-    } state initialization
 
 
   }
