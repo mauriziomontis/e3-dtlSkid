@@ -1,4 +1,4 @@
-MAX_PRESS_CHECK) ||MAX_FLUX_CHECK) ||/* DTL Cooling State Machine
+/* DTL Cooling State Machine
 # State Machine devoted to control the status and the health of DTL cooling sub-system :
 #
 # Principal States:
