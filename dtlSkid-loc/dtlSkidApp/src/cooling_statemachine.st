@@ -1906,7 +1906,7 @@ state start_up {
 	} state intenal_check
 
   /* Pump start-up procedure in auto mode */
-  whne ( (AutoControl_ActualStatus == 1) && (Manual_Test_Done == 1) ) {
+  when ( (AutoControl_ActualStatus == 1) && (Manual_Test_Done == 1) ) {
 		printf("[SEQ COOLING] Starting Automatic Startup Procedure \n");
 
     /* enable pumps and reset errors */
