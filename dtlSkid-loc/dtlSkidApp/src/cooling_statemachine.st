@@ -1903,7 +1903,7 @@ state start_up {
     Manual_Test_Done=0;
     pvPut(Manual_Test_Done);
 
-	} state intenal_check
+	} state internal_check
 
   /* Pump start-up procedure in auto mode */
   when ( (AutoControl_ActualStatus == 1) && (Manual_Test_Done == 1) ) {
@@ -1998,13 +1998,13 @@ state start_up {
     Manual_Test_Done=0;
     pvPut(Manual_Test_Done);
 
-  } state intenal_check
+  } state internal_check
 
 }
 
 
  /* internal state INTERNAL CHECK */
- state intenal_check {
+ state internal_check {
 
      entry {
        printf("\n[SEQ COOLING] Enter in INTERNAL CHECK status (internal status)\n");
