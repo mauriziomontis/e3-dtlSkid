@@ -5,7 +5,7 @@ MAX_PRESS_CHECK) ||MAX_FLUX_CHECK) ||/* DTL Cooling State Machine
 # - Initialization:
 # 	* Initialize State Machine when EPICS application starts
 # - Self-Check:
-#       * Verify HW status (connections, devices\'' health, etc.)
+#       * Verify HW status (connections, devices health, etc.)
 # - Start-Up:
 #       * Prepare the sub-system to perform operations
 # - Idle:
@@ -29,6 +29,7 @@ program cooling_statemachine
 */
 
 %%#include <stdio.h>
+%%#include <stdlib.h>
 %%#include <string.h>
 %%#include <unistd.h>
 
@@ -1213,15 +1214,15 @@ int StartOperationCmd;
 assign StartOperationCmd to "DTL:WtrC:OpRun";
 monitor StartOperationCmd;
 int StopOperationCmd;
-assign StopOperationCmd to "";
+assign StopOperationCmd to "DTL:WtrC:OpStop";
 monitor StopOperationCmd;
 
 /* Maintenance and fault control*/
 int MaintenanceReset;
-assign MaintenanceReset to "DTL:WtrC:OpStop";
+assign MaintenanceReset to "DTL:WtrC:MaintenanceRst";
 monitor MaintenanceReset;
 int FaultReset;
-assign FaultReset to "";
+assign FaultReset to "DTL:WtrC:FaultRst";
 monitor FaultReset;
 
 /* Working Temperatures (from main DTL stame machine) */
@@ -1238,6 +1239,24 @@ double Cooling_Delta_Working_Temperature;
 assign Cooling_Delta_Working_Temperature to "TL:WtrC:DeltaWorkingTmp";
 monitor Cooling_Delta_Working_Temperature;
 
+
+/* Delta Frequency Detuning */
+/*
+ * RF Freq Low Threshold Δf1
+ * RF Freq High Threshold Δf2
+ * | Δf1 | < | Δf2 |
+*/
+double Freq_High_Delta;
+assign Freq_High_Delta to "DTL:RFS:BeamOpHDeltaFreq"
+monitor Freq_High_Delta;
+double Freq_Low_Delta;
+assign Freq_Low_Delta to "DTL:RFS:BeamOpHDeltaFreq"
+monitor Freq_Low_Delta;
+
+/* DTL Frequency Detuning  */
+double DTL_Frequency_Detuning;
+assign  DTL_Frequency_Detuning to "";
+monitor DTL_Frequency_Detuning;
 
 /*
 # Stages Code:
@@ -1978,8 +1997,8 @@ state start_up {
 
     Manual_Test_Done=0;
     pvPut(Manual_Test_Done);
-	} state intenal_check
 
+  } state intenal_check
 
 }
 
@@ -2166,7 +2185,6 @@ state start_up {
           printf("[SEQ COOLING] DTL operation in RF CONDITIONING stage\n");
           dtl_operation_code_prev=dtlOperationalCode;
 
-
           /* System can work in [MAN|AUTO] modes */
           if (AutoControl_ActualStatus == 0) {
             printf("[SEQ COOLING] System in MANUAL mode\n");
@@ -2223,25 +2241,185 @@ state start_up {
             pvPut(T0_Valve_2_Close_Cmd);
 
           }
-
         }
 
-
-
-      }
-
+      } state ready_for_operation
 
       /* DTL Orchestration: case START-UP (dtlOperationalCode == 303)  */
+      when (dtlOperationalCode == 303) {
+        /* First time in this stage */
+        if (dtl_operation_code_prev != dtlOperationalCode) {
+          printf("[SEQ COOLING] DTL operation in RF START-UP stage\n");
+          dtl_operation_code_prev=dtlOperationalCode;
+
+          /* System can work only in AUTO mode */
+          if (AutoControl_ActualStatus == 0) {
+            printf("[SEQ COOLING] Updated control configuration: system cannot operate in MANUAL mode\n");
+            printf("[SEQ COOLING] Start Control Operations in AUTOMATIC Mode\n");
+            AutoControlCmd=1;
+            AutoControl_ActualStatus = AutoControlCmd;
+            pvPut(AutoControlCmd);
+            pvPut(AutoControl_ActualStatus);
+          }
+
+          /* Forced - to be clean */
+          if (AutoControl_ActualStatus == 1) {
+            printf("[SEQ COOLING] System in AUTOMATIC mode\n");
+
+            /* TCV: Set temperatures setpoint to Cooling_BeamOp_Working_Temperature */
+            T0_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T0_Valve_1_Temperature_Setpoint);
+            T1_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T1_Valve_1_Temperature_Setpoint);
+            T2_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T2_Valve_1_Temperature_Setpoint);
+            T3_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T3_Valve_1_Temperature_Setpoint);
+            T4_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T4_Valve_1_Temperature_Setpoint);
+            T5_Valve_1_Temperature_Setpoint=Cooling_BeamOp_Working_Temperature;
+            pvPut(T5_Valve_1_Temperature_Setpoint);
+
+            /* YSV: open/close set */  //TBD - example with close
+            T0_Valve_1_open_Cmd=1;
+            pvPut(T0_Valve_1_Close_Cmd);
+            T0_Valve_2_Close_Cmd=1;
+            pvPut(T0_Valve_2_Close_Cmd);
+
+          }
+        }
+
+      } state temperature_control_mode_check
+
 
       /* DTL Orchestration: case READY FOR OPERATION (dtlOperationalCode == 404)  */
+      when (dtlOperationalCode == 404) {
+        /* First time in this stage */
+        if (dtl_operation_code_prev != dtlOperationalCode) {
+          printf("[SEQ COOLING] DTL operation in READY FOR OPERATION stage\n");
+          dtl_operation_code_prev=dtlOperationalCode;
+
+          /* System can work only in AUTO mode */
+          /* --> already check in RF STARTUP stage */
+
+          /* System temperature already set in STARTUP stage */
+          /* System valves already set in STARTUP stage */
+        }
+
+      } state temperature_control_mode_check
+
 
       /* DTL Orchestration: case NO ACCELERATED BEAM (dtlOperationalCode == 505)  */
+      when (dtlOperationalCode == 505) {
+        /* First time in this stage */
+        if (dtl_operation_code_prev != dtlOperationalCode) {
+          printf("[SEQ COOLING] DTL operation in NO BEAM OPERATION stage\n");
+          dtl_operation_code_prev=dtlOperationalCode;
+
+          /* System can work in [MAN|AUTO] modes */
+          if (AutoControl_ActualStatus == 0) {
+            printf("[SEQ COOLING] System in MANUAL mode\n");
+
+            /* Set TCV valves in manual mode */
+            T0_Valve_1_Manual_Cmd=1;
+            pvPut(T0_Valve_1_Manual_Cmd);
+            T1_Valve_1_Manual_Cmd=1;
+            pvPut(T1_Valve_1_Manual_Cmd);
+            T2_Valve_1_Manual_Cmd=1;
+            pvPut(T2_Valve_1_Manual_Cmd);
+            T3_Valve_1_Manual_Cmd=1;
+            pvPut(T3_Valve_1_Manual_Cmd);
+            T4_Valve_1_Manual_Cmd=1;
+            pvPut(T4_Valve_1_Manual_Cmd);
+            T5_Valve_1_Manual_Cmd=1;
+            pvPut(T5_Valve_1_Manual_Cmd);
+
+          }
+          else if (AutoControl_ActualStatus == 1) {
+            printf("[SEQ COOLING] System in AUTOMATIC mode\n");
+
+            /* TCV: Set temperatures setpoint to Cooling_NoBeam_Working_Temperature */
+            T0_Valve_1_Manual_Cmd=0;
+            pvPut(T0_Valve_1_Manual_Cmd);
+            T1_Valve_1_Manual_Cmd=0;
+            pvPut(T1_Valve_1_Manual_Cmd);
+            T2_Valve_1_Manual_Cmd=0;
+            pvPut(T2_Valve_1_Manual_Cmd);
+            T3_Valve_1_Manual_Cmd=0;
+            pvPut(T3_Valve_1_Manual_Cmd);
+            T4_Valve_1_Manual_Cmd=0;
+            pvPut(T4_Valve_1_Manual_Cmd);
+            T5_Valve_1_Manual_Cmd=0;
+            pvPut(T5_Valve_1_Manual_Cmd);
+
+            T0_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T0_Valve_1_Temperature_Setpoint);
+            T1_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T1_Valve_1_Temperature_Setpoint);
+            T2_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T2_Valve_1_Temperature_Setpoint);
+            T3_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T3_Valve_1_Temperature_Setpoint);
+            T4_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T4_Valve_1_Temperature_Setpoint);
+            T5_Valve_1_Temperature_Setpoint=Cooling_NoBeam_Working_Temperature;
+            pvPut(T5_Valve_1_Temperature_Setpoint);
+
+            /* YSV: open/close set */  //TBD - example with close
+            T0_Valve_1_open_Cmd=1;
+            pvPut(T0_Valve_1_Close_Cmd);
+            T0_Valve_2_Close_Cmd=1;
+            pvPut(T0_Valve_2_Close_Cmd);
+
+          }
+        }
+
+      } state ready_for_operation
 
       /* DTL Orchestration: case MAINTENANCE (dtlOperationalCode == 606)  */
+      when (dtlOperationalCode == 606) {
+        /* First time in this stage */
+        if (dtl_operation_code_prev != dtlOperationalCode) {
+          printf("[SEQ COOLING] DTL operation in MAINTENANCE stage\n");
+          dtl_operation_code_prev=dtlOperationalCode;
+          printf("[SEQ COOLING] System goes in IDLE status\n");
 
+          /* note: check if StartOperationCmd is set to Zero before jump to next state */
+
+        }
+      } state idle
 
   }
 
+
+/* state TEMPERATURE_CONTROL_MODE_CHECK (internal state) */
+state temperature_control_mode_check {
+
+  /* transition RF STARTUP -> BEAM OPERATION */ /* check if T0 must be kept */
+  when ( (dtlOperationalCode == 404) && (T0_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T0_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T1_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T1_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T2_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T2_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) (T3_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T3_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T4_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T4_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T5_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T5_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (abs(DTL_Frequency_Detuning)>=abs(Freq_Low_Delta)) )  {
+    printf("[SEQ COOLING] Conditions for RF STARTUP -> BEAM OPERATION verified \n");
+    printf("[SEQ COOLING] Frequency Detuning inside range [-Δf1,+Δf1] \n");
+    printf("[SEQ COOLING] System in Temperature Control Mode \n");
+
+    /*
+     * Set PVs related to cooling system
+     */
+
+  } state ready_for_operation
+
+  /* transition BEAM OPERATION -> RF STARTUP */
+  when ( (dtlOperationalCode == 303) && (abs(DTL_Frequency_Detuning)>=abs(Freq_High_Delta)) ) {
+    printf("[SEQ COOLING] Conditions for BEAM OPERATION -> RF STARTUP verified \n");
+    printf("[SEQ COOLING] Frequency Detuning outside range [-Δf2,+Δf2] \n");
+    printf("[SEQ COOLING] System in Position Control Mode \n");
+
+    /*
+     * Set PVs related to cooling system
+     */
+
+  } state ready_for_operation
+
+}
 
 
 /* state FAILURE	*/
@@ -2269,7 +2447,15 @@ state start_up {
     }
 
     /* System should provide an healthy status to confirm failure reset */
+    when ( (FaultReset == 1) && (PLC_Message == -188) && (T0_Temperature_Status == 1) && (T1_Temperature_Status == 1) && (T2_Temperature_Status == 1) && (T3_Temperature_Status == 1) && (T4_Temperature_Status == 1) && (T5_Temperature_Status == 1) && ((T0_Temperature_Ilk_Status == 1) && (T0_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T1_Temperature_Ilk_Status == 1) && (T1_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T2_Temperature_Ilk_Status == 1) && (T2_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T3_Temperature_Ilk_Status == 1) && (T3_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T4_Temperature_Ilk_Status == 1) && (T4_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T5_Temperature_Ilk_Status == 1) && (T5_Temperature_Ilk_Enable_Cmd_RB == 1)) && ( T0_Flux_Status == 1) && (T1_Flux_Status == 1) && (T2_Flux_Status == 1) && (T3_Flux_Status == 1) && (T4_Flux_Status == 1) && (T5_Flux_Status == 1) && ((T0_Flux_Ilk_Status == 1) && (T0_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T1_Flux_Ilk_Status == 1) && (T1_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T2_Flux_Ilk_Status == 1) && (T2_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T3_Flux_Ilk_Status == 1) && (T3_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T4_Flux_Ilk_Status == 1) && (T4_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T5_Flux_Ilk_Status == 1) && (T5_Flux_Ilk_Enable_Cmd_RB == 1)) && (T0_Pressure_1_Status == 1) && (T0_Pressure_2_Status == 1) && (T1_Pressure_1_Status == 1) && (T1_Pressure_2_Status == 1) && (T2_Pressure_1_Status == 1) && (T2_Pressure_2_Status == 1) && (T3_Pressure_1_Status == 1) && (T3_Pressure_2_Status == 1) && (T4_Pressure_1_Status == 1) && (T4_Pressure_2_Status == 1) && (T5_Pressure_1_Status == 1) && (T5_Pressure_2_Status == 1) && ((T0_Pressure_1_Ilk_Status == 1) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T0_Pressure_2_Ilk_Status == 1) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T1_Pressure_1_Ilk_Status == 1) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T1_Pressure_2_Ilk_Status == 1) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T2_Pressure_1_Ilk_Status == 1) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T2_Pressure_2_Ilk_Status == 1) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T3_Pressure_1_Ilk_Status == 1) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T3_Pressure_2_Ilk_Status == 1) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T4_Pressure_1_Ilk_Status == 1) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T4_Pressure_2_Ilk_Status == 1) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T5_Pressure_1_Ilk_Status == 1) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T5_Pressure_2_Ilk_Status == 1) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && (T0_Pump_General_Ok_Status == 1) && (T1_Pump_General_Ok_Status == 1) && (T2_Pump_General_Ok_Status == 1) && (T3_Pump_General_Ok_Status == 1) && (T4_Pump_General_Ok_Status == 1) && (T5_Pump_General_Ok_Status == 1) && (T0_Pump_FC_Ok_Status == 1) && (T1_Pump_FC_Ok_Status == 1) && (T2_Pump_FC_Ok_Status == 1) && (T3_Pump_FC_Ok_Status == 1) && (T4_Pump_FC_Ok_Status == 1) && (T5_Pump_FC_Ok_Status == 1) && (T0_Pump_LFC_Ok_Status == 1) && (T1_Pump_LFC_Ok_Status == 1) && (T2_Pump_LFC_Ok_Status == 1) && (T3_Pump_LFC_Ok_Status == 1) && (T4_Pump_LFC_Ok_Status == 1) && (T5_Pump_LFC_Ok_Status == 1) && (T0_Pump_LPIC_Ok_Status == 1) && (T1_Pump_LPIC_Ok_Status == 1) && (T2_Pump_LPIC_Ok_Status == 1) && (T3_Pump_LPIC_Ok_Status == 1) && (T4_Pump_LPIC_Ok_Status == 1) && (T5_Pump_LPIC_Ok_Status == 1) && (T0_Pump_Ilck_Ok_Status == 1) && (T1_Pump_Ilck_Ok_Status == 1) && (T2_Pump_Ilck_Ok_Status == 1) && (T3_Pump_Ilck_Ok_Status == 1) && (T4_Pump_Ilck_Ok_Status == 1) && (T5_Pump_Ilck_Ok_Status == 1) && (T0_Valve_1_Ok_Stat == 1) && (T0_Valve_2_Ok_Stat == 1) && (T0_Valve_1_General_Status == 1) && (T1_Valve_1_General_Status == 1) && (T2_Valve_1_General_Status == 1) && (T3_Valve_1_General_Status == 1) && (T4_Valve_1_General_Status == 1) && (T5_Valve_1_General_Status == 1) && (T0_Valve_1_Ilck_Status == 1) && (T1_Valve_1_Ilck_Status == 1) && (T2_Valve_1_Ilck_Status == 1) && (T3_Valve_1_Ilck_Status == 1) && (T4_Valve_1_Ilck_Status == 1) && (T5_Valve_1_Ilck_Status == 1) ) {
+      printf("[SEQ COOLING] Failure Stage reset by Operator. \n");
+      printf("[SEQ COOLING] Reset conditions satisfied.\n");
 
+      /* Reset FaultReset command */
+      FaultReset=0;
+      pvPut(FaultReset);
+
+    } state maintenance
 
   }
 
@@ -2284,8 +2470,15 @@ state start_up {
     }
 
     /* System should provide an healthy status to confirm failure reset */
+    when ( (MaintenanceReset == 1) && (PLC_Message == -188) && (T0_Temperature_Status == 1) && (T1_Temperature_Status == 1) && (T2_Temperature_Status == 1) && (T3_Temperature_Status == 1) && (T4_Temperature_Status == 1) && (T5_Temperature_Status == 1) && ((T0_Temperature_Ilk_Status == 1) && (T0_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T1_Temperature_Ilk_Status == 1) && (T1_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T2_Temperature_Ilk_Status == 1) && (T2_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T3_Temperature_Ilk_Status == 1) && (T3_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T4_Temperature_Ilk_Status == 1) && (T4_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T5_Temperature_Ilk_Status == 1) && (T5_Temperature_Ilk_Enable_Cmd_RB == 1)) && ( T0_Flux_Status == 1) && (T1_Flux_Status == 1) && (T2_Flux_Status == 1) && (T3_Flux_Status == 1) && (T4_Flux_Status == 1) && (T5_Flux_Status == 1) && ((T0_Flux_Ilk_Status == 1) && (T0_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T1_Flux_Ilk_Status == 1) && (T1_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T2_Flux_Ilk_Status == 1) && (T2_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T3_Flux_Ilk_Status == 1) && (T3_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T4_Flux_Ilk_Status == 1) && (T4_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T5_Flux_Ilk_Status == 1) && (T5_Flux_Ilk_Enable_Cmd_RB == 1)) && (T0_Pressure_1_Status == 1) && (T0_Pressure_2_Status == 1) && (T1_Pressure_1_Status == 1) && (T1_Pressure_2_Status == 1) && (T2_Pressure_1_Status == 1) && (T2_Pressure_2_Status == 1) && (T3_Pressure_1_Status == 1) && (T3_Pressure_2_Status == 1) && (T4_Pressure_1_Status == 1) && (T4_Pressure_2_Status == 1) && (T5_Pressure_1_Status == 1) && (T5_Pressure_2_Status == 1) && ((T0_Pressure_1_Ilk_Status == 1) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T0_Pressure_2_Ilk_Status == 1) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T1_Pressure_1_Ilk_Status == 1) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T1_Pressure_2_Ilk_Status == 1) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T2_Pressure_1_Ilk_Status == 1) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T2_Pressure_2_Ilk_Status == 1) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T3_Pressure_1_Ilk_Status == 1) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T3_Pressure_2_Ilk_Status == 1) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T4_Pressure_1_Ilk_Status == 1) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T4_Pressure_2_Ilk_Status == 1) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T5_Pressure_1_Ilk_Status == 1) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T5_Pressure_2_Ilk_Status == 1) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && (T0_Pump_General_Ok_Status == 1) && (T1_Pump_General_Ok_Status == 1) && (T2_Pump_General_Ok_Status == 1) && (T3_Pump_General_Ok_Status == 1) && (T4_Pump_General_Ok_Status == 1) && (T5_Pump_General_Ok_Status == 1) && (T0_Pump_FC_Ok_Status == 1) && (T1_Pump_FC_Ok_Status == 1) && (T2_Pump_FC_Ok_Status == 1) && (T3_Pump_FC_Ok_Status == 1) && (T4_Pump_FC_Ok_Status == 1) && (T5_Pump_FC_Ok_Status == 1) && (T0_Pump_LFC_Ok_Status == 1) && (T1_Pump_LFC_Ok_Status == 1) && (T2_Pump_LFC_Ok_Status == 1) && (T3_Pump_LFC_Ok_Status == 1) && (T4_Pump_LFC_Ok_Status == 1) && (T5_Pump_LFC_Ok_Status == 1) && (T0_Pump_LPIC_Ok_Status == 1) && (T1_Pump_LPIC_Ok_Status == 1) && (T2_Pump_LPIC_Ok_Status == 1) && (T3_Pump_LPIC_Ok_Status == 1) && (T4_Pump_LPIC_Ok_Status == 1) && (T5_Pump_LPIC_Ok_Status == 1) && (T0_Pump_Ilck_Ok_Status == 1) && (T1_Pump_Ilck_Ok_Status == 1) && (T2_Pump_Ilck_Ok_Status == 1) && (T3_Pump_Ilck_Ok_Status == 1) && (T4_Pump_Ilck_Ok_Status == 1) && (T5_Pump_Ilck_Ok_Status == 1) && (T0_Valve_1_Ok_Stat == 1) && (T0_Valve_2_Ok_Stat == 1) && (T0_Valve_1_General_Status == 1) && (T1_Valve_1_General_Status == 1) && (T2_Valve_1_General_Status == 1) && (T3_Valve_1_General_Status == 1) && (T4_Valve_1_General_Status == 1) && (T5_Valve_1_General_Status == 1) && (T0_Valve_1_Ilck_Status == 1) && (T1_Valve_1_Ilck_Status == 1) && (T2_Valve_1_Ilck_Status == 1) && (T3_Valve_1_Ilck_Status == 1) && (T4_Valve_1_Ilck_Status == 1) && (T5_Valve_1_Ilck_Status == 1) ) {
+      printf("[SEQ COOLING] Failure Stage reset by Operator. \n");
+      printf("[SEQ COOLING] Reset conditions satisfied.\n");
 
+      /* Reset MaintenanceReset command */
+      MaintenanceReset=0;
+      pvPut(MaintenanceReset);
 
+    } state initialization
 
   }
 
