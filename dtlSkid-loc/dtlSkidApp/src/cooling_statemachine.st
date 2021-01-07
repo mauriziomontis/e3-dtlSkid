@@ -1664,6 +1664,9 @@ ss  cooling_statemachine {
       printf("\n[SEQ COOLING] Enter in IDLE status\n");
       StateMachineCode=20;
       pvPut(StateMachineCode);
+
+      StopOperationCmd=0;
+      pvPut(StopOperationCmd);
     }
 
     /* Error: Temperature sensors status not ok */
@@ -1897,6 +1900,13 @@ state start_up {
       }
   } state start_up
 
+  /* Stop Operation (for every mode of operation) */
+  when ( StopOperationCmd == 1 ) {
+      printf("[SEQ COOLING] Stop Control Operations. System goes back to Idle Status.\n");
+      StartOperationCmd=0;
+      pvPut(StartOperationCmd);
+  } state idle
+
   /* Test procedure in manual mode */
 	when ( (AutoControl_ActualStatus == 0) && (Manual_Test_Done == 1) ) {
 		printf("[SEQ COOLING] Manual Startup Procedure Completed \n");
@@ -2028,9 +2038,9 @@ state start_up {
      /* Check if fluxes and pressures are NOT good in automatic mode  */
      when ( (AutoControl_ActualStatus == 1) && ( (T0_Flux_Value > MAX_FLUX_CHECK+0.5) || (T0_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T1_Flux_Value > MAX_FLUX_CHECK+0.5) || (T1_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T2_Flux_Value  > MAX_FLUX_CHECK+0.5) || (T2_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T3_Flux_Value  > MAX_FLUX_CHECK+0.5) || (T3_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T4_Flux_Value  > MAX_FLUX_CHECK+0.5) || (T4_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T5_Flux_Value > MAX_FLUX_CHECK+0.5) || (T5_Flux_Value < MIX_FLUX_CHECK-0.5) ) && ( (T0_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T0_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T0_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T0_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) &&  (T1_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T1_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T1_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T1_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) &&  (T2_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T2_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T2_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T2_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) &&  (T3_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T3_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T3_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T3_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) &&  (T4_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T4_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T4_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T4_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) &&  (T5_Pressure_1_Value > MAX_PRESS_CHECK+0.5) || (T5_Pressure_1_Value < MIN_PRESS_CHECK-0.5) ) && ( (T5_Pressure_2_Value > MAX_PRESS_CHECK+0.5) || (T5_Pressure_2_Value < MIN_PRESS_CHECK-0.5) ) ) {
         printf("[SEQ COOLING] Internal Check in Manual Mode: parameters are NOT ok.\n");
-        printf("[SEQ COOLING] System not passed internal check: go to FAILURE.\n");
+        printf("[SEQ COOLING] System not passed internal check: go to STARTUP.\n");
 
-     } state failure
+     } state start_up
 
      /* Check if fluxes and pressures are good in automatic mode  */
      when ( (AutoControl_ActualStatus == 1) && ( (T0_Flux_Value < MAX_FLUX_CHECK) && (T0_Flux_Value > MIN_FLUX_CHECK) ) && ( (T1_Flux_Value < MAX_FLUX_CHECK) && (T1_Flux_Value > MIN_FLUX_CHECK) ) && ( (T2_Flux_Value < MAX_FLUX_CHECK) && (T2_Flux_Value > MIN_FLUX_CHECK) ) && ( (T3_Flux_Value < MAX_FLUX_CHECK) && (T3_Flux_Value > MIN_FLUX_CHECK) ) && ( (T4_Flux_Value < MAX_FLUX_CHECK) && (T4_Flux_Value > MIN_FLUX_CHECK) ) && ( (T5_Flux_Value < MAX_FLUX_CHECK) && (T5_Flux_Value > MIN_FLUX_CHECK) ) && ( (T0_Pressure_1_Value < MAX_PRESS_CHECK) && (T0_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T0_Pressure_2_Value < MAX_PRESS_CHECK) && (T0_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T1_Pressure_1_Value < MAX_PRESS_CHECK) && (T1_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T1_Pressure_2_Value < MAX_PRESS_CHECK) && (T1_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T2_Pressure_1_Value < MAX_PRESS_CHECK) && (T2_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T2_Pressure_2_Value < MAX_PRESS_CHECK) && (T2_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T3_Pressure_1_Value < MAX_PRESS_CHECK) && (T3_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T3_Pressure_2_Value < MAX_PRESS_CHECK) && (T3_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T4_Pressure_1_Value < MAX_PRESS_CHECK) && (T4_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T4_Pressure_2_Value < MAX_PRESS_CHECK) && (T4_Pressure_2_Value > MIN_PRESS_CHECK) ) &&  (T5_Pressure_1_Value < MAX_PRESS_CHECK) && (T5_Pressure_1_Value > MIN_PRESS_CHECK) ) && ( (T5_Pressure_2_Value < MAX_PRESS_CHECK) && (T5_Pressure_2_Value > MIN_PRESS_CHECK) ) ) {
@@ -2161,6 +2171,13 @@ state start_up {
           }
       } state ready_for_operation
 
+
+      /* Stop Operation (for every mode of operation) */
+      when ( StopOperationCmd == 1 ) {
+          printf("[SEQ COOLING] Stop Control Operations. System goes back to Idle Status.\n");
+          StartOperationCmd=0;
+          pvPut(StartOperationCmd);
+      } state idle
 
       /* ************************************ */
       /* Lost remote communication - managed? */
