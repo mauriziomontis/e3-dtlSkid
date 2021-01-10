@@ -2319,7 +2319,7 @@ state start_up {
           /* System can work only in AUTO mode */
           /* --> already check in RF STARTUP stage */
 
-          /* System temperature already set in STARTUP stage */
+          /* System temperature already set in STARTUP stage (previous "when" condition) */
           /* System valves already set in STARTUP stage */
         }
 
