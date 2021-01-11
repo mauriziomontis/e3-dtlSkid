@@ -1191,7 +1191,7 @@ assign EPICS_Message to "CWM-CWS04:Ctrl-Intf-001:EPICSCommMsg";
 monitor EPICS_Message;
 
 double PLC_Message;
-assign PLC_Message to "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg"
+assign PLC_Message to "CWM-CWS04:Ctrl-Intf-001:PLCCommMsg";
 monitor PLC_Message;
 
 
@@ -1247,10 +1247,10 @@ monitor Cooling_Delta_Working_Temperature;
  * | Δf1 | < | Δf2 |
 */
 double Freq_High_Delta;
-assign Freq_High_Delta to "DTL:RFS:BeamOpHDeltaFreq"
+assign Freq_High_Delta to "DTL:RFS:BeamOpHDeltaFreq";
 monitor Freq_High_Delta;
 double Freq_Low_Delta;
-assign Freq_Low_Delta to "DTL:RFS:BeamOpHDeltaFreq"
+assign Freq_Low_Delta to "DTL:RFS:BeamOpHDeltaFreq";
 monitor Freq_Low_Delta;
 
 /* DTL Frequency Detuning  */
