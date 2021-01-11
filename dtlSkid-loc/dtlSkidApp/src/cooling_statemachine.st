@@ -39,22 +39,22 @@ program cooling_statemachine
 
 /* Ok Status */
 int Main_OK_Status;
-assign Main_OK_Status to "CWM-CWS04:Ctrl-Intf-001:OkStat-RB"
+assign Main_OK_Status to "CWM-CWS04:Ctrl-Intf-001:OkStat-RB";
 monitor Main_OK_Status;
 int T1_OK_Status;
-assign T1_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-010Ok-RB"
+assign T1_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-010Ok-RB";
 monitor T1_OK_Status;
 int T2_OK_Status;
-assign T2_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-020Ok-RB"
+assign T2_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-020Ok-RB";
 monitor T2_OK_Status;
 int T3_OK_Status;
-assign T3_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-030Ok-RB"
+assign T3_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-030Ok-RB";
 monitor T3_OK_Status;
 int T4_OK_Status;
-assign T4_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-040Ok-RB"
+assign T4_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-040Ok-RB";
 monitor T4_OK_Status;
 int T5_OK_Status;
-assign T5_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-050Ok-RB"
+assign T5_OK_Status to "CWM-CWS04:Ctrl-Intf-001:DTL-050Ok-RB";
 monitor T5_OK_Status;
 
 /* Temperature sensors - value */
