@@ -782,24 +782,24 @@ assign T5_Pump_OnStat to "CWM-CWS04:WtrC-P-501:OnStat";
 monitor T5_Pump_OnStat;
 
 /* Pump device - General Ok Status */ /* 0=NOK|1=OK */
-int T0_Pump_General_Ok_Stat;
-assign T0_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-001:OkStat";
-monitor T0_Pump_General_Ok_Stat;
-int T1_Pump_General_Ok_Stat;
-assign T1_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-101:OkStat";
-monitor T1_Pump_General_Ok_Stat;
-int T2_Pump_General_Ok_Stat;
-assign T2_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-201:OkStat";
-monitor T2_Pump_General_Ok_Stat;
-int T3_Pump_General_Ok_Stat;
-assign T3_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-301:OkStat";
-monitor T3_Pump_General_Ok_Stat;
-int T4_Pump_General_Ok_Stat;
-assign T4_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-401:OkStat";
-monitor T4_Pump_General_Ok_Stat;
-int T5_Pump_General_Ok_Stat;
-assign T5_Pump_General_Ok_Stat to "CWM-CWS04:WtrC-P-501:OkStat";
-monitor T5_Pump_General_Ok_Stat;
+int T0_Pump_General_Ok_Status;
+assign T0_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-001:OkStat";
+monitor T0_Pump_General_Ok_Status;
+int T1_Pump_General_Ok_Status;
+assign T1_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-101:OkStat";
+monitor T1_Pump_General_Ok_Status;
+int T2_Pump_General_Ok_Status;
+assign T2_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-201:OkStat";
+monitor T2_Pump_General_Ok_Status;
+int T3_Pump_General_Ok_Status;
+assign T3_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-301:OkStat";
+monitor T3_Pump_General_Ok_Status;
+int T4_Pump_General_Ok_Status;
+assign T4_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-401:OkStat";
+monitor T4_Pump_General_Ok_Status;
+int T5_Pump_General_Ok_Status;
+assign T5_Pump_General_Ok_Status to "CWM-CWS04:WtrC-P-501:OkStat";
+monitor T5_Pump_General_Ok_Status;
 
 /* Pump device - FC Ok Status */ /* 0=NOK|1=OK */
 int T0_Pump_FC_Ok_Status;
@@ -1649,7 +1649,7 @@ ss  cooling_statemachine {
       } state initialization
 
       /* No error in any device (and in remote communication) */
-      when( (PLC_Message == -188) && (T0_Temperature_Status == 1) && (T1_Temperature_Status == 1) && (T2_Temperature_Status == 1) && (T3_Temperature_Status == 1) && (T4_Temperature_Status == 1) && (T5_Temperature_Status == 1) && ((T0_Temperature_Ilk_Status == 1) && (T0_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T1_Temperature_Ilk_Status == 1) && (T1_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T2_Temperature_Ilk_Status == 1) && (T2_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T3_Temperature_Ilk_Status == 1) && (T3_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T4_Temperature_Ilk_Status == 1) && (T4_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T5_Temperature_Ilk_Status == 1) && (T5_Temperature_Ilk_Enable_Cmd_RB == 1)) && ( T0_Flux_Status == 1) && (T1_Flux_Status == 1) && (T2_Flux_Status == 1) && (T3_Flux_Status == 1) && (T4_Flux_Status == 1) && (T5_Flux_Status == 1) && ((T0_Flux_Ilk_Status == 1) && (T0_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T1_Flux_Ilk_Status == 1) && (T1_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T2_Flux_Ilk_Status == 1) && (T2_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T3_Flux_Ilk_Status == 1) && (T3_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T4_Flux_Ilk_Status == 1) && (T4_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T5_Flux_Ilk_Status == 1) && (T5_Flux_Ilk_Enable_Cmd_RB == 1)) && (T0_Pressure_1_Status == 1) && (T0_Pressure_2_Status == 1) && (T1_Pressure_1_Status == 1) && (T1_Pressure_2_Status == 1) && (T2_Pressure_1_Status == 1) && (T2_Pressure_2_Status == 1) && (T3_Pressure_1_Status == 1) && (T3_Pressure_2_Status == 1) && (T4_Pressure_1_Status == 1) && (T4_Pressure_2_Status == 1) && (T5_Pressure_1_Status == 1) && (T5_Pressure_2_Status == 1) && ((T0_Pressure_1_Ilk_Status == 1) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T0_Pressure_2_Ilk_Status == 1) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T1_Pressure_1_Ilk_Status == 1) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T1_Pressure_2_Ilk_Status == 1) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T2_Pressure_1_Ilk_Status == 1) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T2_Pressure_2_Ilk_Status == 1) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T3_Pressure_1_Ilk_Status == 1) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T3_Pressure_2_Ilk_Status == 1) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T4_Pressure_1_Ilk_Status == 1) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T4_Pressure_2_Ilk_Status == 1) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T5_Pressure_1_Ilk_Status == 1) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T5_Pressure_2_Ilk_Status == 1) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && (T0_Pump_General_Ok_Status == 1) && (T1_Pump_General_Ok_Status == 1) && (T2_Pump_General_Ok_Status == 1) && (T3_Pump_General_Ok_Status == 1) && (T4_Pump_General_Ok_Status == 1) && (T5_Pump_General_Ok_Status == 1) && (T0_Pump_FC_Ok_Status == 1) && (T1_Pump_FC_Ok_Status == 1) && (T2_Pump_FC_Ok_Status == 1) && (T3_Pump_FC_Ok_Status == 1) && (T4_Pump_FC_Ok_Status == 1) && (T5_Pump_FC_Ok_Status == 1) && (T0_Pump_LFC_Ok_Status == 1) && (T1_Pump_LFC_Ok_Status == 1) && (T2_Pump_LFC_Ok_Status == 1) && (T3_Pump_LFC_Ok_Status == 1) && (T4_Pump_LFC_Ok_Status == 1) && (T5_Pump_LFC_Ok_Status == 1) && (T0_Pump_LPIC_Ok_Status == 1) && (T1_Pump_LPIC_Ok_Status == 1) && (T2_Pump_LPIC_Ok_Status == 1) && (T3_Pump_LPIC_Ok_Status == 1) && (T4_Pump_LPIC_Ok_Status == 1) && (T5_Pump_LPIC_Ok_Status == 1) && (T0_Pump_Ilck_Ok_Status == 1) && (T1_Pump_Ilck_Ok_Status == 1) && (T2_Pump_Ilck_Ok_Status == 1) && (T3_Pump_Ilck_Ok_Status == 1) && (T4_Pump_Ilck_Ok_Status == 1) && (T5_Pump_Ilck_Ok_Status == 1) && (T0_YSV_1_Ok_Stat == 1) && (T0_Valve_YSV_2_Ok_Stat == 1) && (T0_Valve_YSV_1_General_Status == 1) && (T1_Valve_TCV_1_General_Status == 1) && (T2_Valve_TCV_1_General_Status == 1) && (T3_Valve_TCV_1_General_Status == 1) && (T4_Valve_TCV_1_General_Status == 1) && (T5_Valve_TCV_1_General_Status == 1) && (T0_Valve_TCV_1_Ilck_Status == 1) && (T1_Valve_TCV_1_Ilck_Status == 1) && (T2_Valve_TCV_1_Ilck_Status == 1) && (T3_Valve_TCV_1_Ilck_Status == 1) && (T4_Valve_TCV_1_Ilck_Status == 1) && (T5_Valve_TCV_1_Ilck_Status == 1) ) {
+      when( (PLC_Message == -188) && (T0_Temperature_Status == 1) && (T1_Temperature_Status == 1) && (T2_Temperature_Status == 1) && (T3_Temperature_Status == 1) && (T4_Temperature_Status == 1) && (T5_Temperature_Status == 1) && ((T0_Temperature_Ilk_Status == 1) && (T0_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T1_Temperature_Ilk_Status == 1) && (T1_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T2_Temperature_Ilk_Status == 1) && (T2_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T3_Temperature_Ilk_Status == 1) && (T3_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T4_Temperature_Ilk_Status == 1) && (T4_Temperature_Ilk_Enable_Cmd_RB == 1)) && ((T5_Temperature_Ilk_Status == 1) && (T5_Temperature_Ilk_Enable_Cmd_RB == 1)) && ( T0_Flux_Status == 1) && (T1_Flux_Status == 1) && (T2_Flux_Status == 1) && (T3_Flux_Status == 1) && (T4_Flux_Status == 1) && (T5_Flux_Status == 1) && ((T0_Flux_Ilk_Status == 1) && (T0_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T1_Flux_Ilk_Status == 1) && (T1_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T2_Flux_Ilk_Status == 1) && (T2_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T3_Flux_Ilk_Status == 1) && (T3_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T4_Flux_Ilk_Status == 1) && (T4_Flux_Ilk_Enable_Cmd_RB == 1)) && ((T5_Flux_Ilk_Status == 1) && (T5_Flux_Ilk_Enable_Cmd_RB == 1)) && (T0_Pressure_1_Status == 1) && (T0_Pressure_2_Status == 1) && (T1_Pressure_1_Status == 1) && (T1_Pressure_2_Status == 1) && (T2_Pressure_1_Status == 1) && (T2_Pressure_2_Status == 1) && (T3_Pressure_1_Status == 1) && (T3_Pressure_2_Status == 1) && (T4_Pressure_1_Status == 1) && (T4_Pressure_2_Status == 1) && (T5_Pressure_1_Status == 1) && (T5_Pressure_2_Status == 1) && ((T0_Pressure_1_Ilk_Status == 1) && (T0_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T0_Pressure_2_Ilk_Status == 1) && (T0_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T1_Pressure_1_Ilk_Status == 1) && (T1_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T1_Pressure_2_Ilk_Status == 1) && (T1_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T2_Pressure_1_Ilk_Status == 1) && (T2_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T2_Pressure_2_Ilk_Status == 1) && (T2_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T3_Pressure_1_Ilk_Status == 1) && (T3_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T3_Pressure_2_Ilk_Status == 1) && (T3_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T4_Pressure_1_Ilk_Status == 1) && (T4_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T4_Pressure_2_Ilk_Status == 1) && (T4_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && ((T5_Pressure_1_Ilk_Status == 1) && (T5_Pressure_1_Ilk_Enable_Cmd_RB == 1)) &&  ((T5_Pressure_2_Ilk_Status == 1) && (T5_Pressure_2_Ilk_Enable_Cmd_RB == 1)) && (T0_Pump_General_Ok_Status == 1) && (T1_Pump_General_Ok_Status == 1) && (T2_Pump_General_Ok_Status == 1) && (T3_Pump_General_Ok_Status == 1) && (T4_Pump_General_Ok_Status == 1) && (T5_Pump_General_Ok_Status == 1) && (T0_Pump_FC_Ok_Status == 1) && (T1_Pump_FC_Ok_Status == 1) && (T2_Pump_FC_Ok_Status == 1) && (T3_Pump_FC_Ok_Status == 1) && (T4_Pump_FC_Ok_Status == 1) && (T5_Pump_FC_Ok_Status == 1) && (T0_Pump_LFC_Ok_Status == 1) && (T1_Pump_LFC_Ok_Status == 1) && (T2_Pump_LFC_Ok_Status == 1) && (T3_Pump_LFC_Ok_Status == 1) && (T4_Pump_LFC_Ok_Status == 1) && (T5_Pump_LFC_Ok_Status == 1) && (T0_Pump_LPIC_Ok_Status == 1) && (T1_Pump_LPIC_Ok_Status == 1) && (T2_Pump_LPIC_Ok_Status == 1) && (T3_Pump_LPIC_Ok_Status == 1) && (T4_Pump_LPIC_Ok_Status == 1) && (T5_Pump_LPIC_Ok_Status == 1) && (T0_Pump_Ilck_Ok_Status == 1) && (T1_Pump_Ilck_Ok_Status == 1) && (T2_Pump_Ilck_Ok_Status == 1) && (T3_Pump_Ilck_Ok_Status == 1) && (T4_Pump_Ilck_Ok_Status == 1) && (T5_Pump_Ilck_Ok_Status == 1) && (T0_Valve_YSV_1_Ok_Stat == 1) && (T0_Valve_YSV_2_Ok_Stat == 1) && (T0_Valve_YSV_1_General_Status == 1) && (T1_Valve_TCV_1_General_Status == 1) && (T2_Valve_TCV_1_General_Status == 1) && (T3_Valve_TCV_1_General_Status == 1) && (T4_Valve_TCV_1_General_Status == 1) && (T5_Valve_TCV_1_General_Status == 1) && (T0_Valve_TCV_1_Ilck_Status == 1) && (T1_Valve_TCV_1_Ilck_Status == 1) && (T2_Valve_TCV_1_Ilck_Status == 1) && (T3_Valve_TCV_1_Ilck_Status == 1) && (T4_Valve_TCV_1_Ilck_Status == 1) && (T5_Valve_TCV_1_Ilck_Status == 1) ) {
           printf("[SEQ COOLING] Self Check Passed. \n");
 
 
@@ -1865,7 +1865,7 @@ state start_up {
   } state failure
 
   /* Error: YSV valves status not ok  */
-  when ( (T0_YSV_1_Ok_Stat == 0) || (T0_Valve_YSV_2_Ok_Stat == 0) ) {
+  when ( (T0_Valve_YSV_1_Ok_Stat == 0) || (T0_Valve_YSV_2_Ok_Stat == 0) ) {
     printf("[SEQ COOLING] Error in YSV valves: one or more devices are not ok\n");
     printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
   } state failure
@@ -2139,7 +2139,7 @@ state start_up {
       } state failure
 
       /* Error: YSV valves status not ok  */
-      when ( (T0_YSV_1_Ok_Stat == 0) || (T0_Valve_YSV_2_Ok_Stat == 0) ) {
+      when ( (T0_Valve_YSV_1_Ok_Stat == 0) || (T0_Valve_YSV_2_Ok_Stat == 0) ) {
         printf("[SEQ COOLING] Error in YSV valves: one or more devices are not ok\n");
         printf("[SEQ COOLING] System in error: go to FAILURE \n");
       } state failure
