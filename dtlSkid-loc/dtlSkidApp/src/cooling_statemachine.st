@@ -1571,7 +1571,7 @@ ss  cooling_statemachine {
       } state failure
 
       /* Error: Flux sensors status not ok */
-      when ( T0_Flux_Status == 0) || (T1_Flux_Status == 0) || (T2_Flux_Status == 0) || (T3_Flux_Status == 0) || (T4_Flux_Status == 0) || (T5_Flux_Status == 0) ) {
+      when ( (T0_Flux_Status == 0) || (T1_Flux_Status == 0) || (T2_Flux_Status == 0) || (T3_Flux_Status == 0) || (T4_Flux_Status == 0) || (T5_Flux_Status == 0) ) {
         printf("[SEQ COOLING] Error in flux sensors: one or more devices are not ok\n");
         printf("[SEQ COOLING] System not passed self check: go to FAILURE \n");
       } state failure
