@@ -2302,7 +2302,7 @@ state start_up {
             pvPut(T5_Valve_TCV_1_Temperature_Setpoint);
 
             /* YSV: open/close set */  //TBD - example with close
-            T0_Valve_YSV_1_open_Cmd=1;
+            T0_Valve_YSV_1_Close_Cmd=1;
             pvPut(T0_Valve_YSV_1_Close_Cmd);
             T0_Valve_YSV_2_Close_Cmd=1;
             pvPut(T0_Valve_YSV_2_Close_Cmd);
@@ -2387,7 +2387,7 @@ state start_up {
             pvPut(T5_Valve_TCV_1_Temperature_Setpoint);
 
             /* YSV: open/close set */  //TBD - example with close
-            T0_Valve_YSV_1_open_Cmd=1;
+            T0_Valve_YSV_1_Close_Cmd=1;
             pvPut(T0_Valve_YSV_1_Close_Cmd);
             T0_Valve_YSV_2_Close_Cmd=1;
             pvPut(T0_Valve_YSV_2_Close_Cmd);
@@ -2417,9 +2417,11 @@ state start_up {
 state temperature_control_mode_check {
 
   /* transition RF STARTUP -> BEAM OPERATION */ /* check if T0 must be kept */
-  when ( (dtlOperationalCode == 404) && (T0_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T0_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T1_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T1_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T2_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T2_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) (T3_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T3_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T4_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T4_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (T5_Temperature_Value >= Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature) && (T5_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (abs(DTL_Frequency_Detuning)>=abs(Freq_Low_Delta)) )  {
+  when ( (dtlOperationalCode == 404) && (T0_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T0_Temperature_Value <= (Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature)) && (T1_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T1_Temperature_Value <= (Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature)) && (T2_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T2_Temperature_Value <= (Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature))
+  && (T3_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T3_Temperature_Value <= (Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature)) && (T4_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T4_Temperature_Value <= (Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature))
+  && (T5_Temperature_Value >= (Cooling_BeamOp_Working_Temperature-Cooling_Delta_Working_Temperature)) && (T5_Temperature_Value <= Cooling_BeamOp_Working_Temperature+Cooling_Delta_Working_Temperature) && (abs(DTL_Frequency_Detuning)>=abs(Freq_Low_Delta)) )  {
     printf("[SEQ COOLING] Conditions for RF STARTUP -> BEAM OPERATION verified \n");
-    printf("[SEQ COOLING] Frequency Detuning inside range [-Delta_f1,+Delta_f1] \n");
+    printf("[SEQ COOLING] Frequency Detuning inside range [-Δf1,+Δf1] \n");
     printf("[SEQ COOLING] System in Temperature Control Mode \n");
 
     /*
