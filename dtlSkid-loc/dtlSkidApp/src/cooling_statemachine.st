@@ -1197,43 +1197,43 @@ monitor PLC_Message;
 
 /* Manual/Auto Control  */
 int AutoControlCmd;
-assign AutoControlCmd to "DTL:WtrC:AutoCmd";
+assign AutoControlCmd to "CWM-CWS04::AutoCmd";
 monitor AutoControlCmd;
 
 int AutoControl_ActualStatus;
-assign AutoControl_ActualStatus to "DTL:WtrC:AutoCmd-RB";
+assign AutoControl_ActualStatus to "CWM-CWS04::AutoCmd-RB";
 monitor AutoControl_ActualStatus;
 
 /* Manual Test Procedure Completed Command*/
 int Manual_Test_Done;
-assign Manual_Test_Done to "DTL:WtrC:TestDone";
+assign Manual_Test_Done to "CWM-CWS04::TestDone";
 monitor Manual_Test_Done;
 
 /* Start and Stop Operations */
 int StartOperationCmd;
-assign StartOperationCmd to "DTL:WtrC:OpRun";
+assign StartOperationCmd to "CWM-CWS04::OpRun";
 monitor StartOperationCmd;
 int StopOperationCmd;
-assign StopOperationCmd to "DTL:WtrC:OpStop";
+assign StopOperationCmd to "CWM-CWS04::OpStop";
 monitor StopOperationCmd;
 
 /* Maintenance and fault control*/
 int MaintenanceReset;
-assign MaintenanceReset to "DTL:WtrC:MaintenanceRst";
+assign MaintenanceReset to "CWM-CWS04::MaintenanceRst";
 monitor MaintenanceReset;
 int FaultReset;
-assign FaultReset to "DTL:WtrC:FaultRst";
+assign FaultReset to "CWM-CWS04::FaultRst";
 monitor FaultReset;
 
 /* Working Temperatures (from main DTL stame machine) */
 double Cooling_RFCond_Working_Temperature;
-assign Cooling_RFCond_Working_Temperature to "DTL:WtrC:RFCondWorkingTmp";
+assign Cooling_RFCond_Working_Temperature to "CWM-CWS04::RFCondWorkingTmp";
 monitor Cooling_RFCond_Working_Temperature;
 double Cooling_BeamOp_Working_Temperature;
-assign Cooling_BeamOp_Working_Temperature to "DTL:WtrC:BeamOpWorkingTmp";
+assign Cooling_BeamOp_Working_Temperature to "CWM-CWS04::BeamOpWorkingTmp";
 monitor Cooling_BeamOp_Working_Temperature;
 double Cooling_NoBeam_Working_Temperature;
-assign Cooling_NoBeam_Working_Temperature to "DTL:WtrC:NoBeamWorkingTmp";
+assign Cooling_NoBeam_Working_Temperature to "CWM-CWS04::NoBeamWorkingTmp";
 monitor Cooling_NoBeam_Working_Temperature;
 double Cooling_Delta_Working_Temperature;
 assign Cooling_Delta_Working_Temperature to "TL:WtrC:DeltaWorkingTmp";
@@ -1269,7 +1269,7 @@ monitor DTL_Frequency_Detuning;
 # 	60 -> MAINTENANCE
 */
 int StateMachineCode;
-assign StateMachineCode to "DTL:WtrC:StateMachine";
+assign StateMachineCode to "CWM-CWS04::StateMachine";
 
 /*
 # DTL Operational State Machine Code:

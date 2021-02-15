@@ -4,7 +4,7 @@
 # developed by Maurizio Montis | INFN-LNL
 
 
-record(bo, "DTL:WtrC:AutoCmd") {
+record(bo, "CWM-CWS04::AutoCmd") {
 	field(DESC, "Cooling System automatic control ")
 	field(OMSL, "supervisory")
 	field(PINI, "YES")
@@ -13,7 +13,7 @@ record(bo, "DTL:WtrC:AutoCmd") {
 	field(ONAM, "AUTO")
 }
 
-record(bo, "DTL:WtrC:AutoCmd-RB") {
+record(bo, "CWM-CWS04::AutoCmd-RB") {
 	field(DESC, "Cooling System automatic control readback")
 	field(PINI, "YES")
 	field(VAL, 0)
@@ -21,7 +21,7 @@ record(bo, "DTL:WtrC:AutoCmd-RB") {
 	field(ONAM, "AUTO")
 }
 
-record(bo, "DTL:WtrC:OpRun") {
+record(bo, "CWM-CWS04::OpRun") {
 	field(DESC, "Cooling Sys start operations")
 	field(PINI, "YES")
 	field(VAL, 0)
@@ -29,7 +29,7 @@ record(bo, "DTL:WtrC:OpRun") {
 	field(ONAM, "START")
 }
 
-record(bo, "DTL:WtrC:OpStop") {
+record(bo, "CWM-CWS04::OpStop") {
 	field(DESC, "Cooling Sys stop operations")
 	field(PINI, "YES")
 	field(VAL, 0)
@@ -38,7 +38,7 @@ record(bo, "DTL:WtrC:OpStop") {
 }
 
 
-record(bo, "DTL:WtrC:TestDone") {
+record(bo, "CWM-CWS04::TestDone") {
 	field(DESC, "Cooling Sys confirm aman startup")
 	field(PINI, "YES")
 	field(VAL, 0)

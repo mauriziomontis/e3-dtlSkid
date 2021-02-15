@@ -14,7 +14,7 @@
 # Defined by Maurizio Montis | INFN-LNL
 # mail: maurizio.montis@lnl.infn.it
 
-record(ai, "DTL:WtrC:StateMachine") {
+record(ai, "CWM-CWS04::StateMachine") {
 	field(DESC, "Steerers State machine code")
 	field(VAL, "0")
 	field(PINI, "YES")
