@@ -1236,7 +1236,7 @@ double Cooling_NoBeam_Working_Temperature;
 assign Cooling_NoBeam_Working_Temperature to "CWM-CWS04::NoBeamWorkingTmp";
 monitor Cooling_NoBeam_Working_Temperature;
 double Cooling_Delta_Working_Temperature;
-assign Cooling_Delta_Working_Temperature to "TL:WtrC:DeltaWorkingTmp";
+assign Cooling_Delta_Working_Temperature to "CWM-CWS04::DeltaWorkingTmp";
 monitor Cooling_Delta_Working_Temperature;
 
 
@@ -1247,10 +1247,10 @@ monitor Cooling_Delta_Working_Temperature;
  * | Δf1 | < | Δf2 |
 */
 double Freq_High_Delta;
-assign Freq_High_Delta to "DTL:RFS:BeamOpHDeltaFreq";
+assign Freq_High_Delta to "DTL::RFS-BeamOpHDeltaFreq";
 monitor Freq_High_Delta;
 double Freq_Low_Delta;
-assign Freq_Low_Delta to "DTL:RFS:BeamOpHDeltaFreq";
+assign Freq_Low_Delta to "DTL::RFS-BeamOpHDeltaFreq";
 monitor Freq_Low_Delta;
 
 /* DTL Frequency Detuning  */

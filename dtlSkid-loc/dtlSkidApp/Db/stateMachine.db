@@ -15,7 +15,7 @@
 # mail: maurizio.montis@lnl.infn.it
 
 record(ai, "CWM-CWS04::StateMachine") {
-	field(DESC, "Steerers State machine code")
+	field(DESC, "Cooling State machine code")
 	field(VAL, "0")
 	field(PINI, "YES")
 }
