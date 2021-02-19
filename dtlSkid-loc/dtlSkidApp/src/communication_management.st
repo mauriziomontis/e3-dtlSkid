@@ -160,7 +160,7 @@ ss communication_management {
 		} state setSync
 
 		when( PLC_CODE == -205 ) {
-			/* Communication still waining PLC code [-108] */
+			/* Communication still waiting PLC code [-108] */
 			if (DEBUG == 1) { printf("[SEQ Message] PLC Code pending on 0xFFFFFF33 [-205].  Waiting for 0xFFFFFF44 [-108]\n"); }
 		} state confirmSync
 
