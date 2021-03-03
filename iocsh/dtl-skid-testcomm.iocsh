@@ -45,7 +45,17 @@ require autosave, ${AUTOSAVE_VERSION}
 # @type INTEGER
 # PLC->EPICS receive timeout (ms), should be longer than frequency of PLC SND block trigger (REQ input)
 
-# @field cwm-cws04_ctrl-plc-001_VERSION
+# @field cwm_cws04_ctrl_plc_001_VERSION
+# @runtime YES
+
+# @field SAVEFILE_DIR
+# @type STRING
+# The directory where autosave should save files
+
+# @field REQUIRE_IOC
+# @runtime YES
+
+# @field IOCNAME
 # @runtime YES
 ###################################################################################
 
@@ -67,11 +77,17 @@ modbusInterposeConfig("CWM-CWS04:Ctrl-PLC-001", 0, $(RECVTIMEOUT), 0)
 # Data segment      : 20 words
 drvModbusAsynConfigure("CWM-CWS04:Ctrl-PLC-001write", "CWM-CWS04:Ctrl-PLC-001", 0, 16, -1, 20, 0, 0, "S7-1500")
 
+#- Slave address     : 0
+#- Function code     : 3 - Read Multiple Registers
+#- Addressing        : Relative (0)
+#- Data segment      : 10 words
+#- Polling           : 1000 msec
+drvModbusAsynConfigure("CWM-CWS04:Ctrl-PLC-001read", "CWM-CWS04:Ctrl-PLC-001", 0, 3, 0, 10, 0, 1000, "S7-1500")
 
 #
 # Start autosave module
 #
-loadIocsh("autosave.iocsh", "AS_TOP=$(AUTOSAVE_TOP),IOCNAME=$(IOCNAME)")
+loadIocsh("autosave.iocsh", "AS_TOP=$(AUTOSAVE_TOP),IOCNAME=$(IOCNAME), NUM_SEQ = 1")
 
 
 #
