@@ -101,7 +101,7 @@ dbLoadTemplate("cwm-cws04_ctrl-plc-001-sync.substitutions")
 dbLoadRecords("countdown.db")
 
 # State Machine code
-dbLoadRecords("StateMachine.db")
+dbLoadRecords("stateMachine.db")
 
 # State Machine commands and readback
 dbLoadRecords("dtlCoolingControl.db")
